@@ -5,7 +5,7 @@
     "editor.fontSize": 14,
     "terminal.integrated.fontSize": 12,
     "editor.rulers": [
-        80,
+        90,
         120
     ],
     "workbench.colorTheme": "OM Theme (Default Dracula Italic)",
@@ -33,7 +33,7 @@
     "python.formatting.provider": "autopep8",
     "python.formatting.autopep8Args": [
         "--indent-size=4",
-        "--max-line-length=80"
+        "--max-line-length=90"
         // "--ignore=E111"
     ],
     "python.linting.flake8Args": [
