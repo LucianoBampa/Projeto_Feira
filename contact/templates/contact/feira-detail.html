@@ -1,0 +1,12 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+    <h1> nome da feira: {{object.nome}} </h1>
+    {% if feira.barracas.all %}
+        {% for barraca in feira.barracas.all %}
+            <h3>{{barraca.nome}}</h3>
+        {% endfor%}
+    {% else %}
+        <h1> Nenhuma barraca aqui </h1>
+    {%endif%}
+{% endblock %}

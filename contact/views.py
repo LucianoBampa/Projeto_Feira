@@ -9,13 +9,13 @@ def index(request):
         request, 'contact/index.html',
     )
 
-class FeiraView(generic.ListView):
+class FeiraView(generic.ListView): #lista de feiras
     model = Feira
-    template_name = "contact/feira_list.html"
+    template_name = "contact/feira-list.html"
     paginate_by = 10
 
-class BarracaView(generic.DetailView):
-    model = Barraca
-    template_name = ""
+class FeiraDetail(generic.DetailView): #lista de barracas de uma feira X
+    model = Feira
+    template_name = "contact/feira-detail.html"
     
 

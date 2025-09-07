@@ -19,7 +19,7 @@ class Feira(models.Model):
 
     def get_absolute_url(self):
         """Retorna a URL de uma Feira"""
-        return reverse('feira-detail', args=[str(self.id)])
+        return reverse('contact:barracas', args=[str(self.id)])
 
 
 class Barraca(models.Model):
@@ -43,7 +43,7 @@ class Barraca(models.Model):
 
     def get_absolute_url(self):
         """Retorna a URL de uma Barraca"""
-        return reverse('barraca-detail', args=[str(self.id)])
+        return reverse('contact:barraca-detail', args=[str(self.id)])
 
 
 
