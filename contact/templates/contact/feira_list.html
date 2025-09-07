@@ -1,0 +1,12 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+    {% if feira_list %}
+        <h1>tem feira</h1>
+        {% for feira in feira_list %}
+            <h2>Nome:{{ feira.nome }}</h2>
+        {% endfor %}
+    {% else %}
+        <h1>erro</h1>
+    {% endif %}
+{% endblock %}
