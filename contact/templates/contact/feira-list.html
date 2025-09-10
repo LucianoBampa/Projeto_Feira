@@ -4,10 +4,9 @@
     {% if feira_list %}
         <h1>tem feira</h1>
         {% for feira in feira_list %}
-            <h2>Nome:{{ feira.nome }}</h2>
-            <a href="{{feira.get_absolute_url}}"> la la la <a>  
+            <a href="{{feira.get_absolute_url}}">{{ feira.nome }}<a>  
         {% endfor %}
     {% else %}
-        <h1>erro, nenhuma feira</h1>
+        <h1>nenhuma</h1>
     {% endif %}
 {% endblock %}
