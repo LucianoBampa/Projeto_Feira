@@ -4,11 +4,17 @@ Django + Python + SQLite3
 #Como rodar o projeto 
 
 //git bash, considerando que o python já esta instalado
+
 $ git clone https://github.com/LucianoBampa/Projeto_Feira.git
+
 $ cd Projeto_Feira
+
 $ pip install django
+
 $ source venv/Scripts/Activate
+
 $ python manage.py runserver
+
 
 //no navegador, entre em 127.0.0.1:8000
 
