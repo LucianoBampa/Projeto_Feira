@@ -1,5 +1,17 @@
 🔹 Estrutura do Projeto da Plataforma para Feirantes
 Django + Python + SQLite3
+
+#Como rodar o projeto 
+
+//git bash, considerando que o python já esta instalado
+$ git clone https://github.com/LucianoBampa/Projeto_Feira.git
+$ cd Projeto_Feira
+$ pip install django
+$ source venv/Scripts/Activate
+$ python manage.py runserver
+
+//no navegador, entre em 127.0.0.1:8000
+
 1. Objetivo
 Desenvolver uma plataforma web para feirantes da cidade utilizando Python/Django e SQLite3, onde:
 •	Os locais das feiras sejam exibidos em um mapa interativo com dias de funcionamento
