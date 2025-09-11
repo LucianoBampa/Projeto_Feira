@@ -1,11 +1,14 @@
 {% extends "global/base.html" %}
-
 {% block content %}
+{% include "global/messages.html"%}
+
     {% if feira_list %}
-        <h1>tem feira</h1>
+        <h2>Feiras</h2>
+        <ul>
         {% for feira in feira_list %}
-            <a href="{{feira.get_absolute_url}}">{{ feira.nome }}<a>  
+            <li type = "None"><a href="{{feira.get_absolute_url}}">{{ feira.nome }}<a></li> 
         {% endfor %}
+        </ul>
     {% else %}
         <h1>nenhuma</h1>
     {% endif %}
