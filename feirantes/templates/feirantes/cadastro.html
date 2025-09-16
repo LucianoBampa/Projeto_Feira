@@ -1,0 +1,168 @@
+{% extends 'feirantes/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Cadastro de Feirante - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0 text-center">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Cadastro de Feirante
+                    </h2>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Informações sobre o cadastro -->
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle me-2"></i>Junte-se à nossa comunidade!</h5>
+                        <p class="mb-0">Cadastre-se gratuitamente e conecte-se com consumidores que valorizam produtos
+                            locais e de qualidade.</p>
+                    </div>
+
+                    <!-- Benefícios -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="text-success me-3"><i class="fas fa-store fa-2x"></i></div>
+                                <div>
+                                    <h6>Sua Loja Online</h6>
+                                    <small class="text-muted">Tenha uma página exclusiva para seus produtos</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="text-success me-3"><i class="fas fa-map-marker-alt fa-2x"></i></div>
+                                <div>
+                                    <h6>Apareça no Mapa</h6>
+                                    <small class="text-muted">Clientes encontram você facilmente</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="text-success me-3"><i class="fas fa-search fa-2x"></i></div>
+                                <div>
+                                    <h6>Busca por Produtos</h6>
+                                    <small class="text-muted">Seus produtos aparecem nas buscas</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="text-success me-3"><i class="fas fa-chart-line fa-2x"></i></div>
+                                <div>
+                                    <h6>Painel de Controle</h6>
+                                    <small class="text-muted">Gerencie produtos e informações</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulário -->
+                    <form method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+                            {% render_field field class="form-control" %}
+                            {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+
+                        <!-- Termos e Condições -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="termos" required>
+                                <label class="form-check-label" for="termos">
+                                    Eu concordo com os <a href="#" class="text-decoration-none">termos de uso</a> e <a
+                                        href="#" class="text-decoration-none">política de privacidade</a> *
+                                </label>
+                                <div class="invalid-feedback">Você deve aceitar os termos para continuar.</div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'feirantes:listar' %}" class="btn btn-outline-secondary me-md-2">
+                                <i class="fas fa-arrow-left me-1"></i>Voltar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-user-plus me-1"></i>Criar Conta
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-muted">Já possui uma conta?
+                    <a href="{% url 'login' %}" class="text-decoration-none">
+                        <i class="fas fa-sign-in-alt me-1"></i>Faça login aqui
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Validação Bootstrap e checagem de senhas
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    var senha = form.querySelector('input[name="senha"]').value;
+                    var confirmar = form.querySelector('input[name="confirmar_senha"]').value;
+
+                    if (senha !== confirmar) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        form.querySelector('input[name="confirmar_senha"]').setCustomValidity('As senhas não coincidem');
+                    } else {
+                        form.querySelector('input[name="confirmar_senha"]').setCustomValidity('');
+                    }
+
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+    // Máscara de CPF
+    document.querySelector('#id_cpf')?.addEventListener('input', function (e) {
+        let cpf = e.target.value.replace(/\D/g, '');
+        if (cpf.length > 11) cpf = cpf.substring(0, 11);
+        if (cpf.length > 9) cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+        else if (cpf.length > 6) cpf = cpf.replace(/(\d{3})(\d{3})(\d+)/, "$1.$2.$3");
+        else if (cpf.length > 3) cpf = cpf.replace(/(\d{3})(\d+)/, "$1.$2");
+        e.target.value = cpf;
+    });
+
+    // Máscara de telefone
+    document.querySelector('#id_telefone')?.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 11) {
+            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            if (value.length < 14) value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        }
+        e.target.value = value;
+    });
+</script>
+{% endblock %}

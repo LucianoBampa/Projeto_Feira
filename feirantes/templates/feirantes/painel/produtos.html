@@ -1,0 +1,31 @@
+{% extends 'feirantes/base.html' %}
+{% block title %}Meus Produtos - {{ block.super }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Meus Produtos</h3>
+    <a href="{% url 'feirantes:novo_produto' %}" class="btn btn-success">Novo Produto</a>
+  </div>
+
+  {% if produtos %}
+  <table class="table">
+    <thead><tr><th>Produto</th><th>Preço</th><th>Status</th><th>Ações</th></tr></thead>
+    <tbody>
+      {% for p in produtos %}
+      <tr>
+        <td>{{ p.nome }}</td>
+        <td>{% if p.preco %}R$ {{ p.preco }}{% else %}-{% endif %}</td>
+        <td>{% if p.disponivel %}<span class="badge bg-success">Disponível</span>{% else %}<span class="badge bg-secondary">Indisponível</span>{% endif %}</td>
+        <td>
+          <a href="{% url 'feirantes:editar_produto' p.pk %}" class="btn btn-sm btn-outline-primary">Editar</a>
+          <a href="{% url 'feirantes:excluir_produto' p.pk %}" class="btn btn-sm btn-outline-danger">Excluir</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>Nenhum produto cadastrado.</p>
+  {% endif %}
+</div>
+{% endblock %}

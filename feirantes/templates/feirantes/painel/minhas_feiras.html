@@ -1,0 +1,17 @@
+{% extends 'feirantes/base.html' %}
+{% block content %}
+<div class="container">
+  <h3>Minhas Feiras</h3>
+  {% if feiras %}
+    <ul class="list-group">
+      {% for f in feiras %}
+        <li class="list-group-item">
+          <strong>{{ f.nome }}</strong> — {{ f.cidade }} ({{ f.get_dias_funcionamento_display }})
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Você ainda não participa de nenhuma feira.</p>
+  {% endif %}
+</div>
+{% endblock %}

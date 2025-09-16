@@ -1,0 +1,237 @@
+{% extends 'feirantes/base.html' %}
+
+{% load widget_tweaks %}
+
+{% block title %}Editar Perfil - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Editar Perfil</h3>
+
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <!-- Campo CPF hidden para garantir que seja enviado no formulário -->
+        <input type="hidden" name="cpf" value="{{ feirante.cpf }}">
+
+        <!-- Exibir CPF como informação somente leitura -->
+        <div class="mb-3">
+            <label class="form-label">CPF</label>
+            <input type="text" class="form-control" value="{{ feirante.cpf }}" readonly>
+            <div class="form-text">O CPF não pode ser alterado após o cadastro.</div>
+        </div>
+
+        <!-- Renderizar os outros campos do formulário -->
+        <div class="mb-3">
+            <label class="form-label">Nome comercial *</label>
+            {{ form.nome_comercial|add_class:"form-control" }}
+            {% for error in form.nome_comercial.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <!-- Restante dos campos do formulário -->
+        <div class="mb-3">
+            <label class="form-label">Telefone *</label>
+            {{ form.telefone|add_class:"form-control" }}
+            {% for error in form.telefone.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Whatsapp</label>
+            {{ form.whatsapp|add_class:"form-control" }}
+            {% for error in form.whatsapp.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email *</label>
+            {{ form.email|add_class:"form-control" }}
+            {% for error in form.email.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Endereco</label>
+            {{ form.endereco|add_class:"form-control" }}
+            {% for error in form.endereco.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cidade</label>
+            {{ form.cidade|add_class:"form-control" }}
+            {% for error in form.cidade.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Estado</label>
+            {{ form.estado|add_class:"form-control" }}
+            {% for error in form.estado.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cep</label>
+            {{ form.cep|add_class:"form-control" }}
+            {% for error in form.cep.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descricao</label>
+            {{ form.descricao|add_class:"form-control" }}
+            {% for error in form.descricao.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Foto</label>
+            {{ form.foto|add_class:"form-control" }}
+            {% for error in form.foto.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Especialidades</label>
+            {{ form.especialidades|add_class:"form-select" }}
+            <div class="form-text">Principais produtos/especialidades</div>
+            {% for error in form.especialidades.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Feiras</label>
+            {{ form.feiras|add_class:"form-select" }}
+            <div class="form-text">Feiras onde o feirante participa</div>
+            {% for error in form.feiras.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ativo</label>
+            <div class="form-check">
+                {{ form.ativo|add_class:"form-check-input" }}
+                <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
+                    Ativo
+                </label>
+            </div>
+            {% for error in form.ativo.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Verificado</label>
+            <div class="form-check">
+                {{ form.verificado|add_class:"form-check-input" }}
+                <label class="form-check-label" for="{{ form.verificado.id_for_label }}">
+                    Verificado
+                </label>
+            </div>
+            {% for error in form.verificado.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Subdominio *</label>
+            {{ form.subdominio|add_class:"form-control" }}
+            <div class="form-text">URL da loja: site.com/loja/[subdominio]</div>
+            {% for error in form.subdominio.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Instagram</label>
+            {{ form.instagram|add_class:"form-control" }}
+            {% for error in form.instagram.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Facebook</label>
+            {{ form.facebook|add_class:"form-control" }}
+            {% for error in form.facebook.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Confirmar E-mail</label>
+            {{ form.confirmar_email|add_class:"form-control" }}
+            {% for error in form.confirmar_email.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Nova senha</label>
+            {{ form.senha|add_class:"form-control" }}
+            {% for error in form.senha.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Confirmar nova senha</label>
+            {{ form.confirmar_senha|add_class:"form-control" }}
+            {% for error in form.confirmar_senha.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-secondary me-2" href="{% url 'feirantes:painel' %}">Cancelar</a>
+            <button class="btn btn-success" type="submit">Salvar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Validação Bootstrap
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    // Verificar se as senhas coincidem
+                    var senha = document.querySelector('input[name="senha"]');
+                    var confirmarSenha = document.querySelector('input[name="confirmar_senha"]');
+                    if (senha && confirmarSenha && senha.value !== confirmarSenha.value) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        confirmarSenha.setCustomValidity('As senhas não coincidem');
+                    } else if (confirmarSenha) {
+                        confirmarSenha.setCustomValidity('');
+                    }
+
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

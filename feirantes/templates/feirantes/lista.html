@@ -1,0 +1,104 @@
+{% extends 'feirantes/base.html' %}
+
+{% block title %}Lista de Feirantes - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="fas fa-users text-success me-2"></i>
+                    Nossos Feirantes
+                </h1>
+                <div>
+                    <a href="{% url 'feirantes:mapa' %}" class="btn btn-outline-success me-2">
+                        <i class="fas fa-map-marker-alt me-1"></i>Ver no Mapa
+                    </a>
+                    <a href="{% url 'feirantes:cadastro' %}" class="btn btn-success">
+                        <i class="fas fa-plus me-1"></i>Cadastrar-se
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if feirantes %}
+    <div class="row">
+        {% for feirante in feirantes %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if feirante.foto %}
+                <img src="{{ feirante.foto.url }}" class="card-img-top" alt="{{ feirante.nome_comercial }}"
+                    style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                    style="height: 200px;">
+                    <i class="fas fa-store text-muted" style="font-size: 3rem;"></i>
+                </div>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ feirante.nome_comercial }}</h5>
+
+                    {% if feirante.descricao %}
+                    <p class="card-text text-muted">
+                        {{ feirante.descricao|truncatewords:15 }}
+                    </p>
+                    {% endif %}
+
+                    <div class="mb-2">
+                        {% if feirante.especialidades.all %}
+                        {% for especialidade in feirante.especialidades.all|slice:":3" %}
+                        <span class="badge bg-success me-1">{{ especialidade.nome }}</span>
+                        {% endfor %}
+                        {% if feirante.especialidades.count > 3 %}
+                        <span class="text-muted small">+{{ feirante.especialidades.count|add:"-3" }} mais</span>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+
+                    {% if feirante.telefone %}
+                    <div class="text-muted small mb-2">
+                        <i class="fas fa-phone me-1"></i>{{ feirante.telefone }}
+                    </div>
+                    {% endif %}
+
+                    {% if feirante.feiras.all %}
+                    <div class="text-muted small mb-3">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        {% for feira in feirante.feiras.all|slice:":2" %}
+                        {{ feira.nome }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                        {% if feirante.feiras.count > 2 %}
+                        <span class="text-muted">...</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'feirantes:loja_feirante' feirante.subdominio %}" class="btn btn-success w-100">
+                        <i class="fas fa-store me-1"></i>Visitar Loja
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Paginação pode ser adicionada aqui se necessário -->
+
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>
+                Nenhum feirante cadastrado ainda.
+                <a href="{% url 'feirantes:cadastro' %}" class="alert-link">Seja o primeiro!</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

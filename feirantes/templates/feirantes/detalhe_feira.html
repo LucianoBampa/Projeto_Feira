@@ -1,0 +1,102 @@
+{% extends 'feirantes/base.html' %}
+
+{% block title %}{{ feira.nome }} - Detalhes da Feira{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ feira.nome }}</h1>
+        <a href="{% url 'feirantes:lista_feiras' %}" class="btn btn-secondary">
+            ← Voltar para Feiras
+        </a>
+    </div>
+
+    <!-- Informações da Feira -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informações da Feira</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-map-marker-alt me-1"></i> Endereço:</strong><br>
+                                {{ feira.endereco }}<br>
+                                {{ feira.cidade }} - {{ feira.estado }}</p>
+
+                            <p><strong><i class="fas fa-calendar me-1"></i> Dias:</strong><br>
+                                {{ feira.get_dias_funcionamento_display }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-clock me-1"></i> Horário:</strong><br>
+                                {{ feira.horario_funcionamento }}</p>
+
+                            <p><strong><i class="fas fa-users me-1"></i> Feirantes:</strong><br>
+                                {{ feirantes.count }} feirante(s) cadastrado(s)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-map me-2"></i>Localização</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p class="text-muted">
+                        <i class="fas fa-map-marker-alt text-danger fa-2x mb-2"></i><br>
+                        Feira localizada em {{ feira.cidade }}
+                    </p>
+                    <a href="{% url 'feirantes:mapa' %}" class="btn btn-outline-primary btn-sm">
+                        Ver no mapa geral
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de Feirantes (com âncora #feirantes) -->
+    <div id="feirantes" class="mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i>Feirantes desta Feira</h5>
+            </div>
+            <div class="card-body">
+                {% if feirantes %}
+                <div class="list-group">
+                    {% for feirante in feirantes %}
+                    <a href="{% url 'feirantes:loja_feirante' feirante.subdominio %}"
+                        class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ feirante.nome_comercial }}</h6>
+                                {% if feirante.descricao %}
+                                <p class="mb-1 text-muted">{{ feirante.descricao|truncatewords:15 }}</p>
+                                {% endif %}
+                                <small class="text-muted">
+                                    <i class="fas fa-phone me-1"></i>{{ feirante.telefone }}
+                                    {% if feirante.whatsapp %}
+                                    • <i class="fab fa-whatsapp me-1 text-success"></i>{{ feirante.whatsapp }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <i class="fas fa-chevron-right text-muted"></i>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Nenhum feirante cadastrado nesta feira ainda.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

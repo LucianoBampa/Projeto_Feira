@@ -1,0 +1,238 @@
+{% extends 'feirantes/base.html' %}
+
+{% block title %}{{ feirante.nome_comercial }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Cabeçalho da Loja -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            {% if feirante.foto %}
+                            <img src="{{ feirante.foto.url }}" class="img-fluid rounded-circle mb-3"
+                                alt="{{ feirante.nome_comercial }}"
+                                style="width: 150px; height: 150px; object-fit: cover;">
+                            {% else %}
+                            <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                style="width: 150px; height: 150px;">
+                                <i class="fas fa-store" style="font-size: 3rem;"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-9">
+                            <h1 class="mb-2">{{ feirante.nome_comercial }}</h1>
+
+                            {% if feirante.descricao %}
+                            <p class="text-muted mb-3">{{ feirante.descricao }}</p>
+                            {% endif %}
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% if feirante.telefone %}
+                                    <p class="mb-2">
+                                        <i class="fas fa-phone text-success me-2"></i>
+                                        <a href="tel:{{ feirante.telefone }}" class="text-decoration-none">
+                                            {{ feirante.telefone }}
+                                        </a>
+                                    </p>
+                                    {% endif %}
+
+                                    {% if feirante.email %}
+                                    <p class="mb-2">
+                                        <i class="fas fa-envelope text-success me-2"></i>
+                                        <a href="mailto:{{ feirante.email }}" class="text-decoration-none">
+                                            {{ feirante.email }}
+                                        </a>
+                                    </p>
+                                    {% endif %}
+
+                                    {% if feirante.whatsapp %}
+                                    <p class="mb-2">
+                                        <i class="fab fa-whatsapp text-success me-2"></i>
+                                        <a href="https://wa.me/55{{ feirante.whatsapp }}" target="_blank"
+                                            class="text-decoration-none">
+                                            WhatsApp
+                                        </a>
+                                    </p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6">
+                                    {% if feirante.especialidades.all %}
+                                    <p class="mb-2">
+                                        <strong>Especialidades:</strong>
+                                    </p>
+                                    <div>
+                                        {% for especialidade in feirante.especialidades.all %}
+                                        <span class="badge bg-success me-1 mb-1">{{ especialidade.nome }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+
+                                    {% if feirante.feiras.all %}
+                                    <p class="mb-2 mt-3">
+                                        <strong>Presente nas feiras:</strong>
+                                        {% for feira in feirante.feiras.all %}
+                                        {{ feira.nome }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </p>
+                                    <div>
+                                        {% for feira in feirante.feiras.all %}
+                                        <span class="badge bg-outline-primary me-1 mb-1">
+                                            <i class="fas fa-map-marker-alt me-1"></i>{{ feira.nome }}
+                                        </span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Produtos -->
+    {% if produtos %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>
+                <i class="fas fa-shopping-basket text-success me-2"></i>
+                Nossos Produtos ({{ produtos.count }})
+            </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for produto in produtos %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if produto.foto %}
+                <img src="{{ produto.foto.url }}" class="card-img-top" alt="{{ produto.nome }}"
+                    style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                    style="height: 200px;">
+                    <i class="fas fa-apple-alt text-muted" style="font-size: 3rem;"></i>
+                </div>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ produto.nome }}</h5>
+
+                    {% if produto.descricao %}
+                    <p class="card-text text-muted">
+                        {{ produto.descricao|truncatewords:15 }}
+                    </p>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        {% if produto.preco %}
+                        <span class="h5 text-success">R$ {{ produto.preco }}</span>
+                        {% endif %}
+
+                        {% if produto.unidade %}
+                        <small class="text-muted">/ {{ produto.unidade }}</small>
+                        {% endif %}
+                    </div>
+
+                    {% if produto.observacoes %}
+                    <p class="text-muted small">
+                        <strong>Observação:</strong> {{ produto.observacoes }}
+                    </p>
+                    {% endif %}
+
+                    {% if produto.categoria %}
+                    <span class="badge bg-secondary mb-2">{{ produto.categoria.nome }}</span>
+                    {% endif %}
+
+                    {% if produto.organico %}
+                    <span class="badge bg-success mb-2">
+                        <i class="fas fa-leaf me-1"></i>Orgânico
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>
+                Este feirante ainda não cadastrou produtos em nossa plataforma.
+                <br>
+                <small class="text-muted">
+                    Entre em contato diretamente para conhecer os produtos disponíveis.
+                </small>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Informações de Contato (Rodapé da Loja) -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5>Entre em contato com {{ feirante.nome_comercial }}</h5>
+                    <div class="mt-3">
+                        {% if feirante.whatsapp %}
+                        <a href="https://wa.me/55{{ feirante.whatsapp }}" target="_blank"
+                            class="btn btn-success me-2 mb-2">
+                            <i class="fab fa-whatsapp me-1"></i>WhatsApp
+                        </a>
+                        {% endif %}
+
+                        {% if feirante.telefone %}
+                        <a href="tel:{{ feirante.telefone }}" class="btn btn-outline-success me-2 mb-2">
+                            <i class="fas fa-phone me-1"></i>Telefone
+                        </a>
+                        {% endif %}
+
+                        {% if feirante.email %}
+                        <a href="mailto:{{ feirante.email }}" class="btn btn-outline-primary me-2 mb-2">
+                            <i class="fas fa-envelope me-1"></i>E-mail
+                        </a>
+                        {% endif %}
+
+                        <a href="{% url 'feirantes:mapa_feiras_feirante' feirante.subdominio %}"
+                            class="btn btn-outline-info mb-2">
+                            <i class="fas fa-map-marker-alt me-1"></i>Ver Minhas Feiras no Mapa
+                        </a>
+
+                    </div>
+
+                    {% if feirante.feiras.all %}
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            Você pode encontrar {{ feirante.nome_comercial }} nas seguintes feiras:
+                        </small>
+                        <div class="mt-2">
+                            {% for feira in feirante.feiras.all %}
+                            <div class="badge bg-light text-dark me-2 mb-1 p-2">
+                                <strong>{{ feira.nome }}</strong>
+                                {% if feira.dias_semana %}
+                                <br><small>{{ feira.dias_semana }}</small>
+                                {% endif %}
+                                {% if feira.horario_funcionamento %}
+                                <br><small>{{ feira.horario_funcionamento }}</small>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

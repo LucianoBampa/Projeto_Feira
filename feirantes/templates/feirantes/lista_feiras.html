@@ -1,0 +1,85 @@
+{% extends 'feirantes/base.html' %}
+
+{% block title %}Feiras Cadastradas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="fas fa-map-marker-alt text-success me-2"></i>
+                    Feiras Cadastradas
+                </h1>
+                <a href="{% url 'feirantes:mapa' %}" class="btn btn-outline-success">
+                    <i class="fas fa-map me-1"></i>Ver no Mapa
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% if feiras %}
+    <div class="row">
+        {% for feira in feiras %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-store me-1"></i>
+                        {{ feira.nome }}
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="mb-3">
+                        <p class="mb-1"><strong><i class="fas fa-map-marker-alt me-1"></i> Localização:</strong></p>
+                        <p class="mb-0 text-muted">{{ feira.endereco }}</p>
+                        <p class="mb-0 text-muted">{{ feira.cidade }} - {{ feira.estado }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="mb-1"><strong><i class="fas fa-calendar me-1"></i> Dias:</strong></p>
+                        <p class="mb-0 text-muted">{{ feira.get_dias_funcionamento_display }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="mb-1"><strong><i class="fas fa-clock me-1"></i> Horário:</strong></p>
+                        <p class="mb-0 text-muted">{{ feira.horario_funcionamento }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="mb-1"><strong><i class="fas fa-users me-1"></i> Feirantes:</strong></p>
+                        <p class="mb-0 text-muted">{{ feira.feirante_set.count }} feirante(s) cadastrado(s)</p>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-transparent">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'feirantes:detalhe_feira' feira.id %}" class="btn btn-success">
+                            <i class="fas fa-eye me-1"></i>Ver Detalhes
+                        </a>
+                        {% if feira.feirante_set.count > 0 %}
+                        <a href="{% url 'feirantes:detalhe_feira' feira.id %}#feirantes"
+                            class="btn btn-outline-primary">
+                            <i class="fas fa-users me-1"></i>Ver Feirantes
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle fa-2x mb-3"></i>
+                <h4>Nenhuma feira cadastrada</h4>
+                <p>Não há feiras ativas no momento.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

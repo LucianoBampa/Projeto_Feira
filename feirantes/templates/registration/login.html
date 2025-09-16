@@ -1,0 +1,112 @@
+{% extends 'feirantes/base.html' %}
+
+{% block title %}Login - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Entrar
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" autocomplete="off">
+                        {% csrf_token %}
+
+                        <!-- Campos ocultos para enganar o navegador -->
+                        <div style="display: none;">
+                            <input type="text" name="fakeusername">
+                            <input type="password" name="fakepassword">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Usuário/E-mail</label>
+                            <input type="text" name="username" class="form-control form-control-lg"
+                                value="{{ form.username.value|default:'' }}" required autocomplete="new-username"
+                                autocorrect="off" autocapitalize="off" spellcheck="false">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Senha</label>
+                            <input type="password" name="password" class="form-control form-control-lg" required
+                                autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false">
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-sign-in-alt me-1"></i>Entrar
+                            </button>
+                        </div>
+
+                        {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                        {% endif %}
+                    </form>
+                </div>
+
+                <div class="card-footer bg-light text-center">
+                    <p class="mb-0">
+                        Não possui conta?
+                        <a href="{% url 'feirantes:cadastro' %}" class="text-decoration-none">
+                            <i class="fas fa-user-plus me-1"></i>Cadastre-se aqui
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Solução robusta para prevenir preenchimento automático
+    document.addEventListener('DOMContentLoaded', function () {
+        // Função para limpar campos
+        function limparCampos() {
+            const usernameField = document.querySelector('input[name="username"]');
+            const passwordField = document.querySelector('input[name="password"]');
+
+            if (usernameField) usernameField.value = '';
+            if (passwordField) passwordField.value = '';
+        }
+
+        // Limpar imediatamente
+        limparCampos();
+
+        // Limpar após um pequeno delay (para navegadores mais persistentes)
+        setTimeout(limparCampos, 50);
+        setTimeout(limparCampos, 100);
+        setTimeout(limparCampos, 200);
+
+        // Prevenir autocomplete quando o usuário interagir com os campos
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function () {
+                this.setAttribute('autocomplete', 'off');
+                this.setAttribute('autocorrect', 'off');
+                this.setAttribute('autocapitalize', 'off');
+            });
+        });
+    });
+</script>
+{% endblock %}
