@@ -9,6 +9,8 @@ $ git clone https://github.com/LucianoBampa/Projeto_Feira.git
 
 $ cd Projeto_Feira
 
+$ python.exe -m pip install --upgrade pip
+
 $ pip install -r requirements.txt
 
 $ source venv/Scripts/Activate
