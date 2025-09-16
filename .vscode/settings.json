@@ -1,8 +1,8 @@
 {
-    "window.zoomLevel": 0,
+    "window.zoomLevel": 2,
     "workbench.startupEditor": "none",
     "explorer.compactFolders": false,
-    "editor.fontSize": 14,
+    "editor.fontSize": 12,
     "terminal.integrated.fontSize": 12,
     "editor.rulers": [
         90,

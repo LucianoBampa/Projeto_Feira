@@ -1,0 +1,25 @@
+{% extends "global/base.html" %}
+
+{% block content %}
+    <h1> nome da feira: {{object.nome}} </h1>
+    <iframe
+      width="600"
+      height="450"
+      style="border:0"
+      loading="lazy"
+      allowfullscreen
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://maps.google.com/maps?q={{ feira.latitude|stringformat:'.6f' }},{{ feira.longitude|stringformat:'.6f' }}&z=15&output=embed">
+    </iframe>
+
+
+
+
+    {% if feira.barracas.all %}
+        {% for barraca in feira.barracas.all %}
+            <h3>{{barraca.nome}}</h3>
+        {% endfor%}
+    {% else %}
+        <h1> Nenhuma barraca aqui </h1>
+    {%endif%}
+{% endblock %}
