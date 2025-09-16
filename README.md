@@ -9,7 +9,17 @@ $ git clone https://github.com/LucianoBampa/Projeto_Feira.git
 
 $ cd Projeto_Feira
 
+$ python.exe -m pip install --upgrade pip
+
 $ pip install django
+
+$ pip install django-bootstrap-v5
+
+$ pip install django-widget-tweaks
+
+$ pip install validate_docbr
+
+$ pip install pillow
 
 $ source venv/Scripts/Activate
 
