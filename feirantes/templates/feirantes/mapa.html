@@ -1,4 +1,5 @@
 {% extends 'feirantes/base.html' %}
+{% load static %}
 
 {% block title %}Mapa das Feiras{% endblock %}
 
@@ -7,109 +8,87 @@
 
 <div id="mapa" style="height: 500px; width: 100%;"></div>
 
-<!-- Debug simples -->
 <div class="mt-3 p-3 bg-light rounded">
     <h5>Informações:</h5>
     <p>Feiras carregadas: <span id="feiras-count">0</span></p>
     <p>Marcadores adicionados: <span id="markers-count">0</span></p>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
-<!-- Dados das feiras passados do Django -->
-<script>
-    // type: ignore
-    const feiras = {{ feiras_json| safe }};
-</script>
-
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
 <script>
+    const feiras = {{ feiras_json|safe }};
+    const feiraIconUrl = "{% static 'global/img/marker-verde.png' %}";
+    const userIconUrl = "{% static 'global/img/user-marker.png' %}";
+
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("=== INICIANDO MAPA JSON ===");
-
-        // Verificação de segurança
-        if (typeof feiras === 'undefined' || !Array.isArray(feiras)) {
-            console.error("Erro: feiras não definido ou não é array");
-            document.getElementById('feiras-count').textContent = "Erro";
-            return;
-        }
-
-        console.log("Feiras carregadas:", feiras);
-        document.getElementById('feiras-count').textContent = feiras.length;
-
-        // Criar mapa
-        var mapa = L.map('mapa').setView([-20.5560, -48.5678], 13);
-        console.log("Mapa criado");
-
+        const mapa = L.map('mapa').setView([-20.5560, -48.5678], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
             maxZoom: 19
         }).addTo(mapa);
 
-        var marcadores = [];
+        let marcadores = [];
 
-        // Adicionar cada feira
-        feiras.forEach(function (feira, index) {
-            console.log("Processando feira " + (index + 1) + ":", feira.nome);
-            console.log("  Latitude:", feira.latitude, "Longitude:", feira.longitude);
+        // Ícones
+        const feiraIcon = L.icon({
+            iconUrl: feiraIconUrl,
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+            shadowSize: [41, 41],
+            shadowAnchor: [12, 41]
+        });
 
-            try {
-                // Verificação EXTRA de segurança
-                if (feira.latitude === null || feira.longitude === null) {
-                    throw new Error("Coordenadas nulas");
-                }
+        const userIcon = L.icon({
+            iconUrl: userIconUrl,
+            iconSize: [35, 35],
+            iconAnchor: [17, 35]
+        });
 
-                if (isNaN(feira.latitude) || isNaN(feira.longitude)) {
-                    throw new Error("Coordenadas NaN");
-                }
-
-                // Criar marcador
-                var marker = L.marker([feira.latitude, feira.longitude]).addTo(mapa)
-                    .bindPopup(
-                        '<div style="min-width: 250px;">' +
-                        '<h6><strong>' + feira.nome + '</strong></h6>' +
-                        '<p class="mb-1"><i class="fas fa-map-marker-alt"></i> ' + feira.endereco + '</p>' +
-                        '<p class="mb-1">' + feira.cidade + ' - ' + feira.estado + '</p>' +
-                        '<p class="mb-1"><i class="fas fa-clock"></i> ' + feira.horario + '</p>' +
-                        '<p class="mb-1"><i class="fas fa-calendar"></i> ' + feira.dias + '</p>' +
-                        '<p class="mb-2"><i class="fas fa-users"></i> ' + feira.feirantes_count + ' feirante(s)</p>' +
-                        '<a href="' + feira.url + '" class="btn btn-sm btn-primary">Ver detalhes</a>' +
-                        '</div>'
-                    );
-
+        // Marcadores das feiras
+        feiras.forEach(f => {
+            if (f.latitude && f.longitude) {
+                const marker = L.marker([f.latitude, f.longitude], { icon: feiraIcon }).addTo(mapa)
+                    .bindPopup(`
+                        <strong>${f.nome}</strong><br>
+                        ${f.endereco}, ${f.cidade} - ${f.estado}<br>
+                        ${f.dias}<br>${f.horario}<br>
+                        <p>${f.feirantes_count} feirante(s)</p>
+                        <a href="${f.url}" class="btn btn-sm btn-primary">Ver detalhes</a>
+                    `);
                 marcadores.push(marker);
-                console.log("  ✅ Marcador adicionado com sucesso");
-
-            } catch (error) {
-                console.error("  ❌ Erro ao adicionar marcador:", error.message);
             }
         });
 
-        console.log("Total de marcadores adicionados:", marcadores.length);
-        document.getElementById('markers-count').textContent = marcadores.length;
-
-        // Ajustar zoom se houver marcadores
-        if (marcadores.length > 0) {
-            try {
-                var grupo = L.featureGroup(marcadores);
-                mapa.fitBounds(grupo.getBounds().pad(0.1));
-                console.log("Zoom ajustado para mostrar todos os marcadores");
-            } catch (error) {
-                console.error("Erro ao ajustar zoom:", error);
-            }
+        // Localização do usuário
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    const userMarker = L.marker([pos.coords.latitude, pos.coords.longitude], { icon: userIcon })
+                        .addTo(mapa)
+                        .bindPopup('<strong>Você está aqui</strong>');
+                    marcadores.push(userMarker);
+                    mapa.fitBounds(L.featureGroup(marcadores).getBounds(), { padding: [50,50] });
+                },
+                err => {
+                    if (marcadores.length > 0) {
+                        mapa.fitBounds(L.featureGroup(marcadores).getBounds(), { padding: [50,50] });
+                    }
+                }
+            );
         } else {
-            console.log("Nenhum marcador foi adicionado");
-            // Mensagem amigável para o usuário
-            document.getElementById('mapa').innerHTML =
-                '<div class="alert alert-info text-center m-4">' +
-                '<i class="fas fa-info-circle fa-2x mb-3"></i>' +
-                '<h4>Nenhuma feira com localização disponível</h4>' +
-                '<p>Não há feiras com coordenadas cadastradas no momento.</p>' +
-                '</div>';
+            if (marcadores.length > 0) {
+                mapa.fitBounds(L.featureGroup(marcadores).getBounds(), { padding: [50,50] });
+            }
         }
+
+        document.getElementById('feiras-count').textContent = feiras.length;
+        document.getElementById('markers-count').textContent = marcadores.length;
     });
 </script>
 {% endblock %}

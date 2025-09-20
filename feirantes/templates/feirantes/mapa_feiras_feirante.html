@@ -15,49 +15,71 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
 <script>
-const feiras = {{ feiras_json|safe }};
-const feiranteNome = "{{ feirante.nome_comercial|escapejs }}";
-const userIconUrl = "{% static 'global/img/user-marker.png' %}";
+    const feiras = {{ feiras_json|safe }};
+    const feiraIconUrl = "{% static 'global/img/marker-verde.png' %}";
+    const userIconUrl = "{% static 'global/img/user-marker.png' %}";
 
-document.addEventListener("DOMContentLoaded", function () {
-    const mapa = L.map('mapa').setView([-20.5560, -48.5678], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors', maxZoom: 19 }).addTo(mapa);
+    document.addEventListener("DOMContentLoaded", function () {
+        const mapa = L.map('mapa').setView([-20.5560, -48.5678], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(mapa);
 
-    let marcadores = [];
+        let marcadores = [];
 
-    // Marcadores das feiras
-    feiras.forEach(f => {
-        if (f.latitude && f.longitude) {
-            const marker = L.marker([f.latitude, f.longitude]).addTo(mapa)
-                .bindPopup(`<strong>${f.nome}</strong><br>${f.endereco}, ${f.cidade} - ${f.estado}<br>${f.dias}<br>${f.horario}<br><a href="${f.url}" class="btn btn-sm btn-primary">Ver detalhes</a>`);
-            marcadores.push(marker);
+        const feiraIcon = L.icon({
+            iconUrl: feiraIconUrl,
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+            shadowSize: [41, 41],
+            shadowAnchor: [12, 41]
+        });
+
+        const userIcon = L.icon({
+            iconUrl: userIconUrl,
+            iconSize: [35, 35],
+            iconAnchor: [17, 35]
+        });
+
+        // Marcadores das feiras do feirante
+        feiras.forEach(f => {
+            if (f.latitude && f.longitude) {
+                const marker = L.marker([f.latitude, f.longitude], { icon: feiraIcon }).addTo(mapa)
+                    .bindPopup(`
+                        <strong>${f.nome}</strong><br>
+                        ${f.endereco}, ${f.cidade} - ${f.estado}<br>
+                        ${f.dias}<br>${f.horario}<br>
+                        <p>${f.feirantes_count} feirante(s)</p>
+                        <a href="${f.url}" class="btn btn-sm btn-primary">Ver detalhes</a>
+                    `);
+                marcadores.push(marker);
+            }
+        });
+
+        // Localização do usuário
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    const userMarker = L.marker([pos.coords.latitude, pos.coords.longitude], { icon: userIcon })
+                        .addTo(mapa)
+                        .bindPopup('<strong>Você está aqui</strong>');
+                    marcadores.push(userMarker);
+                    mapa.fitBounds(L.featureGroup(marcadores).getBounds(), { padding: [50,50]});
+                },
+                err => {
+                    if (marcadores.length > 0) {
+                        mapa.fitBounds(L.featureGroup(marcadores).getBounds(), { padding: [50,50] });
+                    }
+                }
+            );
+        } else {
+            if (marcadores.length > 0) {
+                mapa.fitBounds(L.featureGroup(marcadores).getBounds(), { padding: [50,50] });
+            }
         }
     });
-
-    // Ícone customizado do usuário
-    const userIcon = L.icon({ iconUrl: userIconUrl, iconSize: [35,35], iconAnchor: [17,35] });
-
-    // Localização do usuário
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            pos => {
-                const userMarker = L.marker([pos.coords.latitude, pos.coords.longitude], { icon: userIcon })
-                    .addTo(mapa)
-                    .bindPopup('<strong>Você está aqui</strong>');
-                marcadores.push(userMarker);
-                L.featureGroup(marcadores).fitBounds(marcadores.map(m => m.getLatLng()), { padding: [50,50] });
-            },
-            err => {
-                if (marcadores.length > 0) {
-                    L.featureGroup(marcadores).fitBounds(marcadores.map(m => m.getLatLng()), { padding: [50,50] });
-                }
-            }
-        );
-    } else {
-        if (marcadores.length > 0) {
-            L.featureGroup(marcadores).fitBounds(marcadores.map(m => m.getLatLng()), { padding: [50,50] });
-        }
-    }
-});
 </script>
 {% endblock %}

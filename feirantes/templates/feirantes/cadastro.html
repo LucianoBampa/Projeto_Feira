@@ -68,7 +68,8 @@
                         {% csrf_token %}
                         {% for field in form %}
                         <div class="mb-3">
-                            <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+                            <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif
+                                %}</label>
                             {% render_field field class="form-control" %}
                             {% if field.help_text %}
                             <small class="form-text text-muted">{{ field.help_text }}</small>
@@ -157,6 +158,16 @@
 
     // Máscara de telefone
     document.querySelector('#id_telefone')?.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 11) {
+            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            if (value.length < 14) value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        }
+        e.target.value = value;
+    });
+
+    // Máscara de whatsapp
+    document.querySelector('#id_whatsapp')?.addEventListener('input', function (e) {
         let value = e.target.value.replace(/\D/g, '');
         if (value.length <= 11) {
             value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');

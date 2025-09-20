@@ -23,9 +23,9 @@ class FeiraAdmin(admin.ModelAdmin):
         ('Funcionamento', {
             'fields': ('dias_funcionamento', 'horario_funcionamento')
         }),
-        ('Informações Adicionais', {
-            'fields': ('descricao',)
-        }),
+        # ('Informações Adicionais', {
+        #     'fields': ('descricao',)
+        # }),
         ('Status', {
             'fields': ('ativa',)
         }),

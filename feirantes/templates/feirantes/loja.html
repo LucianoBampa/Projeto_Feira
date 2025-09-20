@@ -74,12 +74,14 @@
                                     {% endif %}
 
                                     {% if feirante.feiras.all %}
-                                    <p class="mb-2 mt-3">
-                                        <strong>Presente nas feiras:</strong>
+                                    <p class="mb-2 mt-3"><strong>Presente nas feiras:</strong></p>
+                                    <ul class="mb-2 mt-1">
                                         {% for feira in feirante.feiras.all %}
-                                        {{ feira.nome }}{% if not forloop.last %}, {% endif %}
+                                        <li>{{ feira.nome }}</li>
+                                        {% empty %}
+                                        <li>Não participa de nenhuma feira.</li>
                                         {% endfor %}
-                                    </p>
+                                    </ul>
                                     <div>
                                         {% for feira in feirante.feiras.all %}
                                         <span class="badge bg-outline-primary me-1 mb-1">
