@@ -1,0 +1,254 @@
+/* Estilos responsivos para mapas das feiras */
+
+/* Estilos base para o mapa */
+#mapa {
+    height: 400px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para informações do mapa */
+.mapa-info {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 1px solid #e9ecef;
+}
+
+.mapa-info h5,
+.mapa-info h6 {
+    color: #495057;
+    margin-bottom: 0.75rem;
+}
+
+.mapa-info p {
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+}
+
+/* Estilos para popups do Leaflet */
+.leaflet-popup-content {
+    margin: 12px 16px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.leaflet-popup-content .btn {
+    margin-top: 10px;
+    font-size: 13px;
+    padding: 6px 12px;
+}
+
+.leaflet-container {
+    font-size: 13px;
+}
+
+.leaflet-tooltip {
+    font-size: 13px;
+    padding: 6px 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+/* Classes customizadas para popups */
+.popup-feira .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+}
+
+.popup-feira-feirante .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+/* Responsivo para tablets */
+@media (max-width: 768px) {
+    #mapa {
+        height: 300px !important;
+    }
+
+    .container h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .mapa-info {
+        padding: 0.75rem;
+    }
+
+    .mapa-info h5,
+    .mapa-info h6 {
+        font-size: 1rem;
+    }
+
+    .mapa-info p {
+        font-size: 14px;
+    }
+
+    .leaflet-popup-content {
+        margin: 8px 12px;
+        line-height: 1.4;
+        font-size: 13px;
+    }
+
+    .leaflet-popup-content .btn {
+        margin-top: 8px;
+        width: 100%;
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .leaflet-container {
+        font-size: 12px;
+    }
+
+    .leaflet-tooltip {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+
+    .leaflet-control-zoom {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    .leaflet-control-attribution {
+        font-size: 10px;
+    }
+}
+
+/* Responsivo para smartphones */
+@media (max-width: 480px) {
+    #mapa {
+        height: 250px !important;
+        border-radius: 6px;
+    }
+
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .container h2 {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .mapa-info {
+        padding: 0.5rem;
+        margin-top: 0.75rem;
+    }
+
+    .mapa-info h5,
+    .mapa-info h6 {
+        font-size: 14px;
+    }
+
+    .mapa-info p {
+        font-size: 13px;
+    }
+
+    .leaflet-popup-content {
+        font-size: 12px;
+        max-width: 200px;
+        margin: 6px 10px;
+    }
+
+    .leaflet-popup-content .btn {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+
+    .leaflet-tooltip {
+        font-size: 11px;
+        padding: 3px 5px;
+    }
+
+    .leaflet-control-zoom {
+        margin-top: 5px;
+        margin-left: 5px;
+    }
+
+    .leaflet-control-zoom a {
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        font-size: 14px;
+    }
+
+    .leaflet-control-attribution {
+        font-size: 9px;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+}
+
+/* Estilos para dispositivos com tela muito pequena */
+@media (max-width: 320px) {
+    #mapa {
+        height: 220px !important;
+    }
+
+    .container h2 {
+        font-size: 1.1rem;
+    }
+
+    .leaflet-popup-content {
+        max-width: 180px;
+        font-size: 11px;
+    }
+
+    .leaflet-popup-content .btn {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+}
+
+/* Melhorias para dispositivos touch */
+@media (hover: none) and (pointer: coarse) {
+    .leaflet-container {
+        cursor: default !important;
+    }
+
+    .leaflet-clickable {
+        cursor: pointer !important;
+    }
+
+    .leaflet-popup-content .btn:active {
+        background-color: #0056b3;
+        transform: scale(0.98);
+    }
+}
+
+/* Modo escuro (opcional) */
+@media (prefers-color-scheme: dark) {
+    .mapa-info {
+        background-color: #343a40;
+        border-color: #495057;
+    }
+
+    .mapa-info h5,
+    .mapa-info h6 {
+        color: #f8f9fa;
+    }
+
+    .mapa-info p {
+        color: #adb5bd;
+    }
+
+    #mapa {
+        border-color: #495057;
+    }
+}
+
+/* Animações suaves */
+.leaflet-fade-anim .leaflet-tile {
+    transition: opacity 0.2s;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+    transition: transform 0.25s cubic-bezier(0, 0, 0.25, 1);
+}

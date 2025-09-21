@@ -3,73 +3,21 @@
 
 {% block title %}Feiras de {{ feirante.nome_comercial }}{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'global/css/mapa_responsivo.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <h2>Feiras de {{ feirante.nome_comercial }}</h2>
-    <div id="mapa" style="height: 400px; width: 100%;"></div>
+    <div id="mapa"></div>
     
-    <div class="mt-3 p-3 bg-light rounded">
+    <div class="mapa-info">
         <h6>Informações:</h6>
-        <p class="mb-1">Feiras encontradas: <span id="feiras-count">0</span></p>
-        <p class="mb-0">Marcadores no mapa: <span id="markers-count">0</span></p>
+        <p>Feiras encontradas: <span id="feiras-count">0</span></p>
+        <p>Marcadores no mapa: <span id="markers-count">0</span></p>
     </div>
 </div>
-
-<!-- Estilo responsivo -->
-<style>
-    @media (max-width: 768px) {
-        #mapa {
-            height: 300px !important;
-        }
-        
-        .container h2 {
-            font-size: 1.5rem;
-        }
-        
-        .leaflet-popup-content {
-            margin: 8px 12px;
-            line-height: 1.4;
-            font-size: 13px;
-        }
-        
-        .leaflet-popup-content .btn {
-            margin-top: 8px;
-            width: 100%;
-        }
-        
-        .leaflet-container {
-            font-size: 12px;
-        }
-        
-        .leaflet-tooltip {
-            font-size: 12px;
-            padding: 4px 6px;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        #mapa {
-            height: 250px !important;
-        }
-        
-        .container h2 {
-            font-size: 1.25rem;
-        }
-        
-        .leaflet-popup-content {
-            font-size: 12px;
-            max-width: 200px;
-        }
-        
-        .mt-3.p-3 h6 {
-            font-size: 14px;
-        }
-        
-        .mt-3.p-3 p {
-            font-size: 13px;
-        }
-    }
-</style>
 {% endblock %}
 
 {% block extra_js %}

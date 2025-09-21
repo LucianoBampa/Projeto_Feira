@@ -3,56 +3,20 @@
 
 {% block title %}Mapa das Feiras{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'global/css/mapa_responsivo.css' %}">
+{% endblock %}
+
 {% block content %}
 <h2 class="mb-4">Mapa das Feiras</h2>
 
-<div id="mapa" style="height: 400px; width: 100%;"></div>
+<div id="mapa"></div>
 
-<div class="mt-3 p-3 bg-light rounded">
+<div class="mapa-info">
     <h5>Informações:</h5>
     <p>Feiras carregadas: <span id="feiras-count">0</span></p>
     <p>Marcadores adicionados: <span id="markers-count">0</span></p>
 </div>
-
-<!-- Estilo responsivo adicional -->
-<style>
-    @media (max-width: 768px) {
-        #mapa {
-            height: 300px !important;
-        }
-        
-        .leaflet-popup-content {
-            margin: 8px 12px;
-            line-height: 1.4;
-            font-size: 13px;
-        }
-        
-        .leaflet-popup-content .btn {
-            margin-top: 8px;
-            width: 100%;
-        }
-        
-        .leaflet-container {
-            font-size: 12px;
-        }
-        
-        .leaflet-tooltip {
-            font-size: 12px;
-            padding: 4px 6px;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        #mapa {
-            height: 250px !important;
-        }
-        
-        .leaflet-popup-content {
-            font-size: 12px;
-            max-width: 200px;
-        }
-    }
-</style>
 {% endblock %}
 
 {% block extra_js %}

@@ -124,7 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'base_static',
+    BASE_DIR / 'static',
 ]
 
 # Configuração para arquivos de mídia (fotos dos produtos)
