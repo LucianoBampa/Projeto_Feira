@@ -221,8 +221,8 @@
                             {% for feira in feirante.feiras.all %}
                             <div class="badge bg-light text-dark me-2 mb-1 p-2">
                                 <strong>{{ feira.nome }}</strong>
-                                {% if feira.dias_semana %}
-                                <br><small>{{ feira.dias_semana }}</small>
+                                {% if feira.dias_funcionamento %}
+                                <br><small>{{ feira.dias_funcionamento }}</small>
                                 {% endif %}
                                 {% if feira.horario_funcionamento %}
                                 <br><small>{{ feira.horario_funcionamento }}</small>
