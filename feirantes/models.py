@@ -130,6 +130,7 @@ class Feirante(models.Model):
     verificado = models.BooleanField(default=False)
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
+    views = models.PositiveIntegerField(default=0)
 
     def clean(self):
         """Validação personalizada do CPF"""

@@ -6,6 +6,7 @@ from .forms import FeiranteForm, ProdutoForm, CadastroFeiranteForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, update_session_auth_hash
 from django.db import transaction
+from django.db.models import F
 from django.utils.text import slugify
 from django.urls import reverse
 from .models import Feira, Feirante, Produto
@@ -121,6 +122,8 @@ def loja_feirante(request, subdominio):
         feirante=feirante, disponivel=True
     ).select_related('categoria')
 
+    Feirante.objects.filter(subdominio = subdominio).update(views=F("views")+1)
+    
     return render(request, 'feirantes/loja.html', {
         'feirante': feirante,
         'produtos': produtos
