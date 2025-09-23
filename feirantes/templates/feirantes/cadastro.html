@@ -68,8 +68,7 @@
                         {% csrf_token %}
                         {% for field in form %}
                         <div class="mb-3">
-                            <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif
-                                %}</label>
+                            <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif%}</label>
                             {% render_field field class="form-control" %}
                             {% if field.help_text %}
                             <small class="form-text text-muted">{{ field.help_text }}</small>
