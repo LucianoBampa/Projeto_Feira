@@ -24,7 +24,13 @@
                         </div>
 
                         <div class="col-md-9">
-                            <h1 class="mb-2">{{ feirante.nome_comercial }}</h1>
+                            <!-- <h1 class="mb-2">{{ feirante.nome_comercial }}</h1> -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h1 class="mb-0">{{ feirante.nome_comercial }}</h1>
+                                <span class="text-muted">
+                                    <i class="fas fa-eye me-1"></i> {{ feirante.views }}
+                                </span>
+                            </div>
 
                             {% if feirante.descricao %}
                             <p class="text-muted mb-3">{{ feirante.descricao }}</p>
