@@ -105,7 +105,7 @@ class Feirante(models.Model):
     cpf = models.CharField(max_length=14, unique=True)
     telefone = models.CharField(max_length=20)
     whatsapp = models.CharField(max_length=20, blank=True)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     endereco = models.TextField(blank=True)
     cidade = models.CharField(max_length=100, blank=True)
     estado = models.CharField(max_length=2, blank=True)
@@ -220,3 +220,25 @@ class Contato(models.Model):
 
     def __str__(self):
         return f"{self.assunto} - {self.nome}"
+
+
+class Avaliacao(models.Model):
+    feirante = models.ForeignKey(
+        'Feirante', on_delete=models.CASCADE, related_name='avaliacoes')
+    usuario_nome = models.CharField("Nome do Usuário", max_length=100)
+    usuario_email = models.EmailField(
+        "E-mail do Usuário", null=True, blank=True)
+    usuario_cpf = models.CharField(
+        "CPF do Usuário", max_length=14, default="000.000.000-00")
+    nota = models.PositiveSmallIntegerField("Nota", default=5)
+    comentario = models.TextField("Comentário", blank=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('feirante', 'usuario_email', 'usuario_cpf')
+        verbose_name = "Avaliação"
+        verbose_name_plural = "Avaliações"
+
+    def __str__(self):
+        return f"{self.usuario_nome} \
+            avaliou {self.feirante.nome_comercial} - {self.nota}"

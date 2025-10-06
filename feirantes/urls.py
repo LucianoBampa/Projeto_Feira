@@ -15,6 +15,9 @@ urlpatterns = [
     path('loja/<slug:subdominio>/', views.loja_feirante, name='loja_feirante'),
     path('feira/<int:pk>/', views.detalhe_feira, name='detalhe_feira'),
     path('cadastro/', views.cadastro_feirante, name='cadastro'),
+    path('feirante/<int:feirante_id>/avaliar/',
+         views.avaliar_feirante, name='avaliar_feirante'),
+
 
     # URLs PROTEGIDAS (requerem login)
     path('painel/', login_required(views.painel_feirante), name='painel'),

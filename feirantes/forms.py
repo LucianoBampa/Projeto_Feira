@@ -1,12 +1,14 @@
 from django import forms
-from .models import Feira, Feirante, Produto
+from .models import Feira, Feirante, Produto, Avaliacao
 from validate_docbr import CPF
 from typing import Optional
-
+from decimal import Decimal, ROUND_HALF_UP
 
 # ==========================
 # Form de Feira
 # ==========================
+
+
 class FeiraForm(forms.ModelForm):
     latitude = forms.FloatField(
         required=False,
@@ -49,13 +51,25 @@ class FeiraForm(forms.ModelForm):
                 attrs={"class": "form-check-input"}),
         }
 
-    def clean_latitude(self) -> Optional[float]:
+    def clean_latitude(self) -> Optional[Decimal]:
         value = self.cleaned_data.get("latitude")
-        return float(value) if value not in (None, "") else None
+        if value in (None, ""):
+            return None
+        try:
+            value = Decimal(str(value).replace(',', '.').strip())
+            return value.quantize(Decimal('0.0000001'), rounding=ROUND_HALF_UP)
+        except Exception:
+            raise forms.ValidationError("Latitude inválida.")
 
-    def clean_longitude(self) -> Optional[float]:
+    def clean_longitude(self) -> Optional[Decimal]:
         value = self.cleaned_data.get("longitude")
-        return float(value) if value not in (None, "") else None
+        if value in (None, ""):
+            return None
+        try:
+            value = Decimal(str(value).replace(',', '.').strip())
+            return value.quantize(Decimal('0.0000001'), rounding=ROUND_HALF_UP)
+        except Exception:
+            raise forms.ValidationError("Longitude inválida.")
 
 # ==========================
 # Form de Feirante Cadastro
@@ -338,3 +352,82 @@ class ProdutoForm(forms.ModelForm):
             "observacoes": forms.Textarea(
                 attrs={"class": "form-control", "rows": 2}),
         }
+
+# ==========================
+# Form de Avaliação
+# ==========================
+
+
+class AvaliacaoForm(forms.ModelForm):
+    class Meta:
+        model = Avaliacao
+        fields = ['usuario_nome', 'usuario_email',
+                  'usuario_cpf', 'nota', 'comentario']
+        widgets = {
+            'usuario_nome': forms.TextInput(
+                attrs={
+                    'class': 'form-control', 'placeholder': 'Seu nome completo'
+                }
+            ),
+            'usuario_email': forms.EmailInput(
+                attrs={
+                    'class': 'form-control', 'placeholder': 'Seu e-mail'
+                }
+            ),
+            'usuario_cpf': forms.TextInput(
+                attrs={
+                    'class': 'form-control', 'placeholder': 'Seu CPF'
+                }
+            ),
+            'nota': forms.NumberInput(
+                attrs={
+                    'class': 'form-control', 'min': 1, 'max': 5
+                }
+            ),
+            'comentario': forms.Textarea(
+                attrs={
+                    'class': 'form-control', 'rows': 4, 'placeholder':
+                    'Deixe seu comentário'
+                }
+            ),
+        }
+
+    def clean_usuario_cpf(self):
+        cpf = self.cleaned_data.get('usuario_cpf')
+        if not cpf:
+            raise forms.ValidationError(
+                "CPF é obrigatório para registrar a avaliação.")
+        validator = CPF()
+        if not validator.validate(cpf):
+            raise forms.ValidationError(
+                "CPF inválido. Verifique e tente novamente.")
+        return cpf
+
+
+# class UsuarioForm(forms.Form):
+#     nome = forms.CharField(label="Nome Completo", max_length=100)
+#     email = forms.EmailField(label="E-mail")
+#     cpf = forms.CharField(label="CPF", max_length=14)
+#     senha = forms.CharField(label="Senha", widget=forms.PasswordInput)
+#     confirmar_senha = forms.CharField(
+#         label="Confirmar Senha", widget=forms.PasswordInput)
+
+#     def clean_cpf(self):
+#         cpf = self.cleaned_data.get("cpf")
+#         validar_cpf(cpf)
+#         return cpf
+
+#     def clean_email(self):
+#         email = self.cleaned_data.get("email")
+#         if User.objects.filter(email=email).exists():
+#             raise ValidationError("Este e-mail já está cadastrado.")
+#         return email
+
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         senha = cleaned_data.get("senha")
+#         confirmar = cleaned_data.get("confirmar_senha")
+
+#         if senha and confirmar and senha != confirmar:
+#             self.add_error("confirmar_senha", "As senhas não coincidem.")
+#         return cleaned_data

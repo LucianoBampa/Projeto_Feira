@@ -31,6 +31,11 @@
                                     <i class="fas fa-eye me-1"></i> {{ feirante.views }}
                                 </span>
                             </div>
+                            <div class="mt-3">
+                                <a href="{% url 'feirantes:avaliar_feirante' feirante.id %}" class="btn btn-success">
+                                    <i class="fas fa-star me-1"></i> Avaliar este Feirante
+                                </a>
+                            </div>
 
                             {% if feirante.descricao %}
                             <p class="text-muted mb-3">{{ feirante.descricao }}</p>

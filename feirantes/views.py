@@ -3,15 +3,17 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import FeiranteForm, ProdutoForm, CadastroFeiranteForm
+from .forms import AvaliacaoForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, update_session_auth_hash
 from django.db import transaction
-from django.db.models import F
+from django.db.models import F, Avg
 from django.utils.text import slugify
 from django.urls import reverse
-from .models import Feira, Feirante, Produto
+from .models import Feira, Feirante, Produto, Avaliacao
 from django.http import HttpResponseForbidden
 from validate_docbr import CPF
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def listar_feirantes(request):
@@ -116,13 +118,24 @@ def buscar(request):
 
 
 def loja_feirante(request, subdominio):
-    """Página da loja individual do feirante"""
-    feirante = get_object_or_404(Feirante, subdominio=subdominio, ativo=True)
+    feirante: Feirante = get_object_or_404(
+        Feirante, subdominio=subdominio, ativo=True
+    )
     produtos = Produto.objects.filter(
         feirante=feirante, disponivel=True
     ).select_related('categoria')
 
-    Feirante.objects.filter(subdominio=subdominio).update(views=F('views') + 1)
+    viewed_key = f"viewed_feirante_{feirante.id}"  # type: ignore
+    if viewed_key not in request.session:
+        if (
+            not request.user.is_authenticated
+            or not hasattr(request.user, 'feirante')
+            or request.user.feirante.id != feirante.id  # type: ignore
+        ):
+            Feirante.objects.filter(subdominio=subdominio).update(
+                views=F('views') + 1
+            )
+            request.session[viewed_key] = True  # Marca como visualizado
 
     return render(request, 'feirantes/loja.html', {
         'feirante': feirante,
@@ -218,19 +231,78 @@ def detalhe_feira(request, pk):
     })
 
 
+def avaliar_feirante(request, feirante_id):
+    feirante = get_object_or_404(Feirante, pk=feirante_id)
+
+    # Bloqueia autoavaliação
+    if request.user.is_authenticated and hasattr(request.user, 'feirante'):
+        if request.user.feirante.id == feirante.id:  # type: ignore
+            messages.warning(request, "Você não pode avaliar a si mesmo.")
+            return redirect('feirantes:listar')
+
+    if request.method == 'POST':
+        form = AvaliacaoForm(request.POST)
+        if form.is_valid():
+            avaliacao = form.save(commit=False)
+            avaliacao.feirante = feirante
+            avaliacao.save()
+            messages.success(request, "Avaliação registrada com sucesso!")
+            return redirect('feirantes:listar')
+    else:
+        form = AvaliacaoForm()
+
+    return render(request, 'feirantes/avaliar_feirante.html', {
+        'form': form,
+        'feirante': feirante
+    })
+
+
 @login_required
 def painel_feirante(request):
-    """Painel administrativo do feirante"""
+    """Painel administrativo do feirante (com paginação de avaliações)"""
     try:
         feirante = request.user.feirante
     except Feirante.DoesNotExist:
         messages.error(request, 'Complete seu cadastro como feirante.')
         return redirect('feirantes:cadastro')
 
+    # Produtos do feirante
     produtos = Produto.objects.filter(feirante=feirante)
+
+    # Avaliações ordenadas
+    avaliacoes_qs = Avaliacao.objects.filter(
+        feirante=feirante
+    ).order_by('-criado_em')
+
+    # Média de notas
+    media = avaliacoes_qs.aggregate(media=Avg('nota'))['media']
+    media_avaliacao = round(media, 1) if media else None
+
+    # Paginação (5 avaliações por página)
+    paginator = Paginator(avaliacoes_qs, 3)
+    page_number = request.GET.get('page', 1)
+    try:
+        avaliacoes = paginator.page(page_number)
+    except PageNotAnInteger:
+        avaliacoes = paginator.page(1)
+    except EmptyPage:
+        avaliacoes = paginator.page(paginator.num_pages)
+
+    # Verifica se o perfil do feirante está completo
+    perfil_completo = all([
+        feirante.descricao,
+        feirante.foto,
+        produtos.exists(),
+        feirante.feiras.exists(),
+    ])
+
+    # Renderiza o painel com as avaliações paginadas
     return render(request, 'feirantes/painel/dashboard.html', {
         'feirante': feirante,
-        'produtos': produtos
+        'produtos': produtos,
+        'avaliacoes': avaliacoes,          # objeto paginado
+        'media_avaliacao': media_avaliacao,
+        'perfil_completo': perfil_completo,
     })
 
 

@@ -15,7 +15,7 @@
 
 
     <!-- Favicon para iOS -->
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'global/img/apple-touch-icon.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'global/img/favicon-96x96.png' %}">
 
     <!-- Manifesto para PWA -->
     <link rel="manifest" href="{% static 'global/img/site.webmanifest' %}">
@@ -30,7 +30,7 @@
             <!-- LOGO PRINCIPAL - deve ir para a lista de FEIRAS -->
             <a class="navbar-brand d-flex align-items-center" href="{% url 'feirantes:lista_feiras' %}">
                 <!-- Logo principal -->
-                <img src="{% static 'global/img/logo_verm.png' %}" alt="Logo Feira" width="100" height="100"
+                <img src="{% static 'global/img/logo_fundoBranco.png' %}" alt="Logo Feira" width="100" height="100"
                     class="me-2 rounded-circle">
             </a>
 
@@ -90,11 +90,16 @@
                         </ul>
                     </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'feirantes:cadastro' %}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="cadastroDropdown" role="button"
+                            data-bs-toggle="dropdown">
                             <i class="fas fa-user-plus me-1"></i>Cadastrar
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'feirantes:cadastro' %}">Sou Feirante</a></li>
+                        </ul>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">
                             <i class="fas fa-sign-in-alt me-1"></i>Entrar
@@ -146,7 +151,7 @@
             <!-- Logo centralizada no final com link -->
             <div class="mt-3">
                 <a href="{% url 'feirantes:lista_feiras' %}">
-                    <img src="{% static 'global/img/logo_verm.png' %}" alt="Logo Feira" width="120" height="120">
+                    <img src="{% static 'global/img/logo_fundo_verde.jpg' %}" alt="Logo Feira" width="120" height="120">
                 </a>
             </div>
         </div>
