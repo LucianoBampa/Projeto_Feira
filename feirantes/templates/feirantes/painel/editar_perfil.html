@@ -10,7 +10,7 @@
 
     <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         {% csrf_token %}
-        
+
         <!-- Campo CPF hidden para garantir que seja enviado no formulário -->
         <input type="hidden" name="cpf" value="{{ feirante.cpf }}">
 
@@ -56,7 +56,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Endereco</label>
+            <label class="form-label">Endereço</label>
             {{ form.endereco|add_class:"form-control" }}
             {% for error in form.endereco.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>
@@ -88,7 +88,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Descricao</label>
+            <label class="form-label">Descrição</label>
             {{ form.descricao|add_class:"form-control" }}
             {% for error in form.descricao.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>

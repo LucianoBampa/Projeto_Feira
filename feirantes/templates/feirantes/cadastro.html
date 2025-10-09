@@ -70,9 +70,23 @@
                         <div class="mb-3">
                             <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif%}</label>
                             {% render_field field class="form-control" %}
+
+                            {% if field.name == "senha" %}
+                            <!-- Exibe as regras do Django para a senha -->
+                            <div class="alert alert-light border mt-2 mb-0">
+                                <strong><i class="fas fa-shield-alt me-2"></i>Requisitos de senha:</strong>
+                                <ul class="mb-0 mt-2 small">
+                                    {% for validator in password_validators_help_texts %}
+                                    <li>{{ validator }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+
                             {% if field.help_text %}
                             <small class="form-text text-muted">{{ field.help_text }}</small>
                             {% endif %}
+
                             {% for error in field.errors %}
                             <div class="invalid-feedback d-block">{{ error }}</div>
                             {% endfor %}
@@ -105,7 +119,7 @@
 
             <div class="text-center mt-4">
                 <p class="text-muted">Já possui uma conta?
-                    <a href="{% url 'login' %}" class="text-decoration-none">
+                    <a href="{% url 'feirantes:login' %}" class="text-decoration-none">
                         <i class="fas fa-sign-in-alt me-1"></i>Faça login aqui
                     </a>
                 </p>

@@ -8,7 +8,7 @@ from feirantes import views
 urlpatterns = [
     path('', views.mapa_feiras, name='home'),
     path('admin/', admin.site.urls),
-    path('auth/', include('django.contrib.auth.urls')),
+    # path('auth/', include('django.contrib.auth.urls')),
     path('feirantes/', include(
         ('feirantes.urls', 'feirantes'),
         namespace='feirantes')

@@ -1,0 +1,15 @@
+{% extends 'feirantes/base.html' %}
+
+{% block title %}Senha redefinida - Projeto Feira{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="alert alert-success text-center mt-5 shadow-sm">
+            <h4>Senha redefinida com sucesso!</h4>
+            <p>Você já pode acessar sua conta com a nova senha.</p>
+            <a href="{% url 'feirantes:login' %}" class="btn btn-success mt-3">Ir para login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

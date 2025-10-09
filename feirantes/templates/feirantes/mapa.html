@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 
 <script>
-    const feiras = {{ feiras_json|safe }};
+    const feiras = {{ feiras_json| safe }};
     const feiraIconUrl = "{% static 'global/img/marker-verde.png' %}";
     const userIconUrl = "{% static 'global/img/user-marker.png' %}";
 
@@ -35,7 +35,7 @@
             attributionControl: true,
             preferCanvas: false
         }).setView([-20.5560, -48.5678], 13);
-        
+
         // Camada de tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
@@ -69,7 +69,7 @@
         function criarPopup(feira) {
             const isMobile = window.innerWidth <= 768;
             const maxWidth = isMobile ? 250 : 300;
-            
+
             return `
                 <div style="min-width: ${isMobile ? '180px' : '220px'};">
                     <strong style="font-size: ${isMobile ? '14px' : '16px'};">${feira.nome}</strong><br>
@@ -102,14 +102,14 @@
         // Adicionar marcadores das feiras
         feiras.forEach(feira => {
             if (feira.latitude && feira.longitude) {
-                const marker = L.marker([feira.latitude, feira.longitude], { 
+                const marker = L.marker([feira.latitude, feira.longitude], {
                     icon: feiraIcon,
                     riseOnHover: true
                 }).addTo(mapa);
 
                 // Configurar tooltip (hover)
-                marker.bindTooltip(criarTooltip(feira), { 
-                    permanent: false, 
+                marker.bindTooltip(criarTooltip(feira), {
+                    permanent: false,
                     direction: "top",
                     offset: [0, -10]
                 });
@@ -121,18 +121,18 @@
                 });
 
                 // Eventos para dispositivos móveis e desktop
-                marker.on('click', function(e) {
+                marker.on('click', function (e) {
                     // No mobile, abrir popup ao clicar
                     marker.openPopup();
                 });
 
                 // Apenas para desktop - hover
                 if (window.innerWidth > 768) {
-                    marker.on('mouseover', function(e) {
+                    marker.on('mouseover', function (e) {
                         marker.openTooltip();
                     });
-                    
-                    marker.on('mouseout', function(e) {
+
+                    marker.on('mouseout', function (e) {
                         marker.closeTooltip();
                     });
                 }
@@ -146,26 +146,26 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     pos => {
-                        const userMarker = L.marker([pos.coords.latitude, pos.coords.longitude], { 
-                            icon: userIcon 
+                        const userMarker = L.marker([pos.coords.latitude, pos.coords.longitude], {
+                            icon: userIcon
                         }).addTo(mapa);
 
-                        userMarker.bindTooltip("Você está aqui", { 
+                        userMarker.bindTooltip("Você está aqui", {
                             direction: "top",
-                            permanent: false 
+                            permanent: false
                         });
-                        
+
                         marcadores.push(userMarker);
-                        
+
                         // Ajustar vista para incluir todos os marcadores
                         if (marcadores.length > 0) {
                             const group = new L.featureGroup(marcadores);
-                            mapa.fitBounds(group.getBounds(), { 
+                            mapa.fitBounds(group.getBounds(), {
                                 padding: [20, 20],
                                 maxZoom: 15
                             });
                         }
-                        
+
                         document.getElementById('markers-count').textContent = marcadores.length;
                     },
                     err => {
@@ -173,7 +173,7 @@
                         // Ajustar vista apenas para as feiras
                         if (marcadores.length > 0) {
                             const group = new L.featureGroup(marcadores);
-                            mapa.fitBounds(group.getBounds(), { 
+                            mapa.fitBounds(group.getBounds(), {
                                 padding: [20, 20],
                                 maxZoom: 15
                             });
@@ -189,7 +189,7 @@
                 // Navegador não suporta geolocalização
                 if (marcadores.length > 0) {
                     const group = new L.featureGroup(marcadores);
-                    mapa.fitBounds(group.getBounds(), { 
+                    mapa.fitBounds(group.getBounds(), {
                         padding: [20, 20],
                         maxZoom: 15
                     });
@@ -200,13 +200,13 @@
 
         // Atualizar contadores
         document.getElementById('feiras-count').textContent = feiras.length;
-        
+
         // Adicionar localização do usuário
         adicionarLocalizacaoUsuario();
 
         // Ajustar mapa quando a tela é redimensionada
-        window.addEventListener('resize', function() {
-            setTimeout(function() {
+        window.addEventListener('resize', function () {
+            setTimeout(function () {
                 mapa.invalidateSize();
             }, 100);
         });

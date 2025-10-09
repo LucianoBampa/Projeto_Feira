@@ -1,0 +1,15 @@
+{% extends 'feirantes/base.html' %}
+
+{% block title %}E-mail enviado - Projeto Feira{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="alert alert-success text-center mt-5 shadow-sm">
+            <h4>Verifique seu e-mail!</h4>
+            <p>Enviamos um link para redefinir sua senha. Confira sua caixa de entrada.</p>
+            <a href="{% url 'feirantes:login' %}" class="btn btn-success mt-3">Voltar para login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

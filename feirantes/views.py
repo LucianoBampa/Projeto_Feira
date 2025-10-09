@@ -6,6 +6,10 @@ from .forms import FeiranteForm, ProdutoForm, CadastroFeiranteForm
 from .forms import AvaliacaoForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth.password_validation import (
+    password_validators_help_texts,
+    validate_password,
+)
 from django.db import transaction
 from django.db.models import F, Avg
 from django.utils.text import slugify
@@ -14,6 +18,7 @@ from .models import Feira, Feirante, Produto, Avaliacao
 from django.http import HttpResponseForbidden
 from validate_docbr import CPF
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.exceptions import ValidationError
 
 
 def listar_feirantes(request):
@@ -165,12 +170,20 @@ def cadastro_feirante(request):
                 if Feirante.objects.filter(cpf=cpf_formatado).exists():
                     messages.error(request, 'Este CPF já está cadastrado.')
                     return render(
-                        request, 'feirantes/cadastro.html', {'form': form})
+                        request, 'feirantes/cadastro.html', {
+                            'form': form,
+                            'password_validators_help_texts':
+                            password_validators_help_texts
+                        })
 
                 if User.objects.filter(email=email).exists():
                     messages.error(request, 'Este e-mail já está cadastrado.')
                     return render(
-                        request, 'feirantes/cadastro.html', {'form': form})
+                        request, 'feirantes/cadastro.html', {
+                            'form': form,
+                            'password_validators_help_texts':
+                                password_validators_help_texts
+                        })
 
                 subdominio_base = slugify(nome_comercial)
                 subdominio = subdominio_base
@@ -211,14 +224,23 @@ def cadastro_feirante(request):
             except Exception as e:
                 messages.error(request, f'Erro ao criar cadastro: {str(e)}')
                 return render(
-                    request, 'feirantes/cadastro.html', {'form': form})
+                    request, 'feirantes/cadastro.html', {
+                        'form': form,
+                        'password_validators_help_texts':
+                            password_validators_help_texts
+                    })
         else:
             # Se o formulário não for válido, renderize com os erros
-            return render(request, 'feirantes/cadastro.html', {'form': form})
+            return render(request, 'feirantes/cadastro.html', {
+                'form': form,
+                'password_validators_help_texts':
+                    password_validators_help_texts})
     else:
         form = CadastroFeiranteForm()
 
-    return render(request, 'feirantes/cadastro.html', {'form': form})
+    return render(request, 'feirantes/cadastro.html', {
+        'form': form,
+        'password_validators_help_texts': password_validators_help_texts})
 
 
 def detalhe_feira(request, pk):
@@ -319,17 +341,39 @@ def editar_perfil(request):
         # Adicionar o CPF ao POST data antes de criar o formulário
         post_data = request.POST.copy()
         post_data['cpf'] = feirante.cpf  # Garantir que o CPF esteja presente
-
         form = FeiranteForm(post_data, request.FILES, instance=feirante)
+
         if form.is_valid():
             feirante = form.save(commit=False)
 
             senha = form.cleaned_data.get('senha')
             confirmar_senha = form.cleaned_data.get('confirmar_senha')
-            if senha and confirmar_senha and senha == confirmar_senha:
-                request.user.set_password(senha)
-                request.user.save()
-                update_session_auth_hash(request, request.user)
+
+            # Verifica e valida senha no padrão Django
+            if senha or confirmar_senha:
+                if senha != confirmar_senha:
+                    messages.error(request, 'As senhas não coincidem.')
+                    return render(request,
+                                  'feirantes/painel/editar_perfil.html', {
+                                      'form': form,
+                                      'feirante': feirante
+                                  })
+
+                try:
+                    if senha:
+                        validate_password(str(senha), request.user)
+                    request.user.set_password(senha)
+                    request.user.save()
+                    update_session_auth_hash(request, request.user)
+                    messages.success(request, 'Senha atualizada com sucesso!')
+                except ValidationError as e:
+                    for erro in e.messages:
+                        messages.error(request, erro)
+                    return render(
+                        request, 'feirantes/painel/editar_perfil.html', {
+                            'form': form,
+                            'feirante': feirante
+                        })
 
             feirante.save()
             form.save_m2m()

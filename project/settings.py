@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'feirantes',
     'widget_tweaks',
-    # 'produtos',
-    # 'pillow',
 ]
 
 MIDDLEWARE = [
@@ -98,6 +96,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME':
         'django.contrib.auth.password_validation.'
         'MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8},
     },
     {
         'NAME':
@@ -114,8 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
-LANGUAGE_CODE = 'pt-BR'
+LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
+USE_L10N = True
 USE_I18N = True
 USE_TZ = True
 
@@ -132,9 +132,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Configurações de autenticação
-LOGIN_URL = '/auth/login/'
-LOGIN_REDIRECT_URL = '/feirantes/painel/'
+LOGIN_URL = 'feirantes:login'
 LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'feirantes:painel'
+
 
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
@@ -154,3 +155,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configurações específicas para upload de arquivos
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+
+# Configuração do backend de email para desenvolvimento
+# Durante o desenvolvimento, os emails serão impressos no console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
