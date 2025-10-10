@@ -149,9 +149,51 @@ class Feirante(models.Model):
         return self.nome_comercial
 
     def save(self, *args, **kwargs):
+        # --- Gera o subdomínio automaticamente, se não existir ---
         if not self.subdominio:
             self.subdominio = slugify(self.nome_comercial)
+
+        # --- Formata o número de WhatsApp ---
+        if self.whatsapp:
+            self.whatsapp = ''.join(filter(str.isdigit, self.whatsapp))
+            if not self.whatsapp.startswith('55'):
+                self.whatsapp = '55' + self.whatsapp
+
+        # --- Formata o número de telefone ---
+        if self.telefone:
+            self.telefone = ''.join(filter(str.isdigit, self.telefone))
+            if not self.telefone.startswith('55'):
+                self.telefone = '55' + self.telefone
+
         super().save(*args, **kwargs)
+
+    @property
+    def telefone_formatado(self):
+        """Retorna o telefone formatado para exibição"""
+        if not self.telefone:
+            return ""
+        numero = self.telefone
+        if numero.startswith('55'):
+            numero = numero[2:]
+        if len(numero) == 11:
+            return f"({numero[:2]}) {numero[2:7]}-{numero[7:]}"
+        elif len(numero) == 10:
+            return f"({numero[:2]}) {numero[2:6]}-{numero[6:]}"
+        return numero
+
+    @property
+    def whatsapp_formatado(self):
+        """Retorna o whatsapp formatado para exibição"""
+        if not self.whatsapp:
+            return ""
+        numero = self.whatsapp
+        if numero.startswith('55'):
+            numero = numero[2:]
+        if len(numero) == 11:
+            return f"({numero[:2]}) {numero[2:7]}-{numero[7:]}"
+        elif len(numero) == 10:
+            return f"({numero[:2]}) {numero[2:6]}-{numero[6:]}"
+        return numero
 
 
 class Categoria(models.Model):

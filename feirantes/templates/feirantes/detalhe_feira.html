@@ -78,9 +78,9 @@
                                 <p class="mb-1 text-muted">{{ feirante.descricao|truncatewords:15 }}</p>
                                 {% endif %}
                                 <small class="text-muted">
-                                    <i class="fas fa-phone me-1"></i>{{ feirante.telefone }}
+                                    <i class="fas fa-phone me-1"></i>{{ feirante.telefone_formatado }}
                                     {% if feirante.whatsapp %}
-                                    • <i class="fab fa-whatsapp me-1 text-success"></i>{{ feirante.whatsapp }}
+                                    • <i class="fab fa-whatsapp me-1 text-success"></i>{{ feirante.whatsapp_formatado }}
                                     {% endif %}
                                 </small>
                             </div>

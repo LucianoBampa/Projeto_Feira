@@ -47,7 +47,7 @@
                                     <p class="mb-2">
                                         <i class="fas fa-phone text-success me-2"></i>
                                         <a href="tel:{{ feirante.telefone }}" class="text-decoration-none">
-                                            {{ feirante.telefone }}
+                                            {{ feirante.telefone_formatado }}
                                         </a>
                                     </p>
                                     {% endif %}
@@ -209,7 +209,7 @@
 
                         {% if feirante.telefone %}
                         <a href="tel:{{ feirante.telefone }}" class="btn btn-outline-success me-2 mb-2">
-                            <i class="fas fa-phone me-1"></i>Telefone
+                            <i class="fas fa-phone me-1"></i>{{ feirante.telefone_formatado }}
                         </a>
                         {% endif %}
 
