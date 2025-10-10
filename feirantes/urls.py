@@ -19,6 +19,11 @@ urlpatterns = [
     path('feirante/<int:feirante_id>/avaliar/',
          views.avaliar_feirante, name='avaliar_feirante'),
 
+    # Termos de uso e política de privacidade
+    path('termos-uso/', views.termos_uso, name='termos_uso'),
+    path('politica-privacidade/', views.politica_privacidade,
+         name='politica_privacidade'),
+
     # Recuperação de senha
     path(
         'senha/redefinir/',
@@ -64,6 +69,7 @@ urlpatterns = [
         auth_views.LogoutView.as_view(next_page='feirantes:login'),
         name='logout'
     ),
+
 
     # URLs PROTEGIDAS
     path('painel/', login_required(views.painel_feirante,

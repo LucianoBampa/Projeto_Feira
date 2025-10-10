@@ -485,3 +485,12 @@ def minhas_feiras(request):
     feiras = feirante.feiras.all()
     return render(request, 'feirantes/painel/minhas_feiras.html',
                   {'feiras': feiras})
+
+
+# Termos de uso e política de privacidade
+def termos_uso(request):
+    return render(request, 'feirantes/termos_uso.html')
+
+
+def politica_privacidade(request):
+    return render(request, 'feirantes/politica_privacidade.html')

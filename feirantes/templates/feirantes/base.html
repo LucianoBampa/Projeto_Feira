@@ -113,7 +113,7 @@
 
     <!-- Messages -->
     {% if messages %}
-        {% include 'feirantes/mensagens.html' %}
+    {% include 'feirantes/mensagens.html' %}
     {% endif %}
 
     <!-- Main Content -->
@@ -134,9 +134,10 @@
                 <!-- Coluna do texto com quebra de linha -->
                 <div class="col-md-6 text-md-end">
                     <small class="text-muted">
-                        &copy; {% now "Y" %} <br>
-                        Sistema de Feirantes - INOVA TECH <br>
-                        Todos os direitos reservados.
+                        &copy; 2025 Sistema de Feirantes - INOVA TECH
+                        <br>
+                        <a href="{% url 'feirantes:termos_uso' %}" target="_blank">Termos de Uso</a> |
+                        <a href="{% url 'feirantes:politica_privacidade' %}" target="_blank">Política de Privacidade</a>
                     </small>
                 </div>
             </div>
