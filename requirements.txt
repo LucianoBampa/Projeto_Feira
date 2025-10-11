@@ -4,20 +4,17 @@ django-widget-tweaks>=1.5.0
 # Framework principal
 Django>=4.2.23
 
-# Banco de dados MySQL
-mysqlclient==2.2.4
+# Biblioteca de imagens
+Pillow>=10.0.0
 
-# Biblioteca de imagens (para manipular uploads de fotos)
-Pillow==10.3.0
-
-# Validação de documentos brasileiros (CPF, CNPJ etc.)
+# Validação de documentos brasileiros
 validate_docbr>=1.11.1
 
-# Variáveis de ambiente (opcional, caso use .env para senhas)
+# Variáveis de ambiente (.env)
 python-decouple>=3.0,<3.9
 
 # Suporte a fusos horários
 tzdata==2024.1
 
-# Utilitário opcional para melhorar a compatibilidade no Windows
+# Compatibilidade no Windows
 colorama==0.4.6
