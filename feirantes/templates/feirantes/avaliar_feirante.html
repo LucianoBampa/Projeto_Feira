@@ -40,12 +40,28 @@
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.nota.id_for_label }}" class="form-label">Nota (1 a 5)</label>
-                {{ form.nota }}
-                {% if form.nota.errors %}
-                <div class="text-danger small">{{ form.nota.errors }}</div>
-                {% endif %}
+                <label class="form-label d-block">Nota</label>
+                {% for radio in form.nota %}
+                    <div class="form-check form-check-inline">
+                        {{ radio.tag }}
+                        <label class="form-check-label">{{ radio.choice_label }}</label>
+                    </div>
+                {% endfor %}
             </div>
+
+            <style>
+                /* Cor verde quando o radio está marcado */
+                .form-check-input:checked {
+                    background-color: #198754;
+                    border-color: #198754;
+                }
+                
+                /* Cor verde no foco */
+                .form-check-input:focus {
+                    border-color: #198754;
+                    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+                }
+            </style>
 
             <div class="mb-3">
                 <label for="{{ form.comentario.id_for_label }}" class="form-label">Comentário</label>

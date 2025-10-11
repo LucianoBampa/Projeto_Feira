@@ -56,8 +56,8 @@
         <div class="col-md-3 mb-3">
             <div class="card text-center h-100">
                 <div class="card-body">
-                    <i class="fas fa-shopping-basket text-success fa-2x mb-2"></i>
-                    <h3 class="text-success">{{ produtos.count }}</h3>
+                    <i class="fas fa-shopping-basket text-secondary fa-2x mb-2"></i>
+                    <h3 class="text-secondary">{{ produtos.count }}</h3>
                     <p class="card-text">Produtos Cadastrados</p>
                 </div>
             </div>
@@ -65,8 +65,8 @@
         <div class="col-md-3 mb-3">
             <div class="card text-center h-100">
                 <div class="card-body">
-                    <i class="fas fa-map-marker-alt text-info fa-2x mb-2"></i>
-                    <h3 class="text-info">{{ feirante.feiras.count }}</h3>
+                    <i class="fas fa-map-marker-alt text-success fa-2x mb-2"></i>
+                    <h3 class="text-success">{{ feirante.feiras.count }}</h3>
                     <p class="card-text">Feiras Participantes</p>
                 </div>
             </div>
@@ -74,20 +74,22 @@
         <div class="col-md-3 mb-3">
             <div class="card text-center h-100">
                 <div class="card-body">
-                    <i class="fas fa-eye text-warning fa-2x mb-2"></i>
-                    <h3 class="text-warning">{{ feirante.views }}</h3>
+                    <i class="fas fa-eye text-primary fa-2x mb-2"></i>
+                    <h3 class="text-primary">{{ feirante.views }}</h3>
                     <p class="card-text">Visualizações</p>
                 </div>
             </div>
         </div>
+
         <div class="col-md-3 mb-3">
             <div class="card text-center h-100">
                 <div class="card-body">
-                    <i class="fas fa-star text-danger fa-2x mb-2"></i>
+                    <i class="fas fa-star text-warning fa-2x mb-2"></i>
                     {% if media_avaliacao %}
-                    <h3 class="text-danger">{{ media_avaliacao|floatformat:1 }}</h3>
+                    <h3 class="text-warning">{{ media_avaliacao|floatformat:1 }}</h3>
                     <p class="card-text">Média de Avaliações</p>
-                    <small class="text-muted">{{ avaliacoes.count }} {{ avaliacoes.count|pluralize:"avaliação,avaliações" }}</small>
+                    <small class="text-muted">
+                        {{ avaliacoes.count }} {{ avaliacoes.count|pluralize:"avaliação,avaliações" }}</small>
                     {% else %}
                     <h3 class="text-muted">-</h3>
                     <p class="card-text">Sem Avaliações</p>
@@ -97,90 +99,88 @@
         </div>
     </div>
 
-<!-- Avaliações -->
-<div class="card mt-4 mb-4">
-    <div class="card-header">
-        <h5 class="mb-0">
-            <i class="fas fa-comments text-success me-2"></i>Comentários dos Clientes
-        </h5>
-    </div>
-    <div class="card-body">
-        {% if avaliacoes %}
+    <!-- Avaliações -->
+    <div class="card mt-4 mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-comments text-success me-2"></i>Comentários dos Clientes
+            </h5>
+        </div>
+        <div class="card-body">
+            {% if avaliacoes %}
             {% for a in avaliacoes %}
-                <div class="mb-3 border-bottom pb-2">
-                    <strong>{{ a.usuario_nome }}</strong>
-                    <span class="text-warning ms-2">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= a.nota %}
-                                <i class="fas fa-star"></i>
-                            {% endif %}
+            <div class="mb-3 border-bottom pb-2">
+                <strong>{{ a.usuario_nome }}</strong>
+                <span class="text-warning ms-2">
+                    {% for i in "12345" %}
+                    {% if forloop.counter <= a.nota %} <i class="fas fa-star"></i>
+                        {% endif %}
                         {% endfor %}
-                    </span>
-                    <br>
-                    {% if a.usuario_email %}
-                        <small class="text-muted">
-                            <a href="mailto:{{ a.usuario_email }}">{{ a.usuario_email }}</a>
-                        </small>
-                    {% endif %}
-                    <p class="mt-2">{{ a.comentario }}</p>
-                </div>
+                </span>
+                <br>
+                {% if a.usuario_email %}
+                <small class="text-muted">
+                    <a href="mailto:{{ a.usuario_email }}">{{ a.usuario_email }}</a>
+                </small>
+                {% endif %}
+                <p class="mt-2">{{ a.comentario }}</p>
+            </div>
             {% endfor %}
-        {% else %}
+            {% else %}
             <p class="text-muted">Ainda não há comentários de clientes.</p>
-        {% endif %}        
+            {% endif %}
+        </div>
     </div>
-</div>
-{% if avaliacoes.has_other_pages %}
-<nav aria-label="Paginação de avaliações" class="mt-4">
-  <ul class="pagination justify-content-center">
-    <!-- Botão Anterior -->
-    {% if avaliacoes.has_previous %}
-      <li class="page-item">
-        <a class="page-link rounded-pill px-3 shadow-sm text-success border-success"
-           href="?page={{ avaliacoes.previous_page_number }}">
-          ‹ Anterior
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled">
-        <span class="page-link rounded-pill px-3 bg-light text-muted border-0">‹ Anterior</span>
-      </li>
-    {% endif %}
+    {% if avaliacoes.has_other_pages %}
+    <nav aria-label="Paginação de avaliações" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <!-- Botão Anterior -->
+            {% if avaliacoes.has_previous %}
+            <li class="page-item">
+                <a class="page-link rounded-pill px-3 shadow-sm text-success border-success"
+                    href="?page={{ avaliacoes.previous_page_number }}">
+                    ‹ Anterior
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link rounded-pill px-3 bg-light text-muted border-0">‹ Anterior</span>
+            </li>
+            {% endif %}
 
-    <!-- Números das páginas -->
-    {% for num in avaliacoes.paginator.page_range %}
-      {% if num == avaliacoes.number %}
-        <li class="page-item active">
-          <span class="page-link rounded-pill bg-success border-success text-white shadow-sm">
-            {{ num }}
-          </span>
-        </li>
-      {% else %}
-        <li class="page-item">
-          <a class="page-link rounded-pill text-success border-success shadow-sm"
-             href="?page={{ num }}">
-            {{ num }}
-          </a>
-        </li>
-      {% endif %}
-    {% endfor %}
+            <!-- Números das páginas -->
+            {% for num in avaliacoes.paginator.page_range %}
+            {% if num == avaliacoes.number %}
+            <li class="page-item active">
+                <span class="page-link rounded-pill bg-success border-success text-white shadow-sm">
+                    {{ num }}
+                </span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link rounded-pill text-success border-success shadow-sm" href="?page={{ num }}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
 
-    <!-- Botão Próxima -->
-    {% if avaliacoes.has_next %}
-      <li class="page-item">
-        <a class="page-link rounded-pill px-3 shadow-sm text-success border-success"
-           href="?page={{ avaliacoes.next_page_number }}">
-          Próxima ›
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled">
-        <span class="page-link rounded-pill px-3 bg-light text-muted border-0">Próxima ›</span>
-      </li>
+            <!-- Botão Próxima -->
+            {% if avaliacoes.has_next %}
+            <li class="page-item">
+                <a class="page-link rounded-pill px-3 shadow-sm text-success border-success"
+                    href="?page={{ avaliacoes.next_page_number }}">
+                    Próxima ›
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link rounded-pill px-3 bg-light text-muted border-0">Próxima ›</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
     {% endif %}
-  </ul>
-</nav>
-{% endif %}
 
     <div class="row">
         <!-- Menu de Ações Rápidas -->
@@ -194,13 +194,13 @@
                         <a href="{% url 'feirantes:novo_produto' %}" class="btn btn-success">
                             <i class="fas fa-plus me-1"></i>Adicionar Produto
                         </a>
-                        <a href="{% url 'feirantes:produtos' %}" class="btn btn-outline-success">
+                        <a href="{% url 'feirantes:produtos' %}" class="btn btn-outline-secondary">
                             <i class="fas fa-shopping-basket me-1"></i>Gerenciar Produtos
                         </a>
                         <a href="{% url 'feirantes:editar_perfil' %}" class="btn btn-outline-primary">
                             <i class="fas fa-user-edit me-1"></i>Editar Perfil
                         </a>
-                        <a href="{% url 'feirantes:minhas_feiras' %}" class="btn btn-outline-info">
+                        <a href="{% url 'feirantes:minhas_feiras' %}" class="btn btn-outline-success">
                             <i class="fas fa-map-marker-alt me-1"></i>Minhas Feiras
                         </a>
                     </div>
@@ -361,20 +361,20 @@
                     <div class="mb-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <span>Foto do perfil</span>
-                                {% if feirante.foto %}
-                                    <i class="fas fa-check-circle text-success"></i>
-                                {% else %}
-                                    <i class="fas fa-exclamation-circle text-warning"></i>
-                                {% endif %}
+                            {% if feirante.foto %}
+                            <i class="fas fa-check-circle text-success"></i>
+                            {% else %}
+                            <i class="fas fa-exclamation-circle text-warning"></i>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <span>Descrição completa</span>
                             {% if feirante.descricao %}
-                                <i class="fas fa-check-circle text-success"></i>
+                            <i class="fas fa-check-circle text-success"></i>
                             {% else %}
-                                <i class="fas fa-exclamation-circle text-warning"></i>
+                            <i class="fas fa-exclamation-circle text-warning"></i>
                             {% endif %}
                         </div>
                     </div>
@@ -399,22 +399,22 @@
                         </div>
                     </div>
                     <hr>
-                    
+
                     <div class="text-center">
                         {% if perfil_completo %}
-                            <div class="alert alert-success d-flex align-items-center" role="alert">
-                                <i class="fas fa-trophy me-2 text-warning"></i>
-                                <div>
-                                    <strong>Parabéns!</strong> Seu perfil está completo!
-                                </div>
+                        <div class="alert alert-success d-flex align-items-center" role="alert">
+                            <i class="fas fa-trophy me-2 text-warning"></i>
+                            <div>
+                                <strong>Parabéns!</strong> Seu perfil está completo!
                             </div>
+                        </div>
                         {% else %}
-                            <div class="alert alert-warning d-flex align-items-center" role="alert">
-                                <i class="fas fa-exclamation-circle me-2"></i>
-                                <div>
-                                    Complete seu perfil!
-                                </div>
+                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <div>
+                                Complete seu perfil!
                             </div>
+                        </div>
                         {% endif %}
                     </div>
                 </div>

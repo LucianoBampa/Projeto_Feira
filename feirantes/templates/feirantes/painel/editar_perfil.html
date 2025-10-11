@@ -2,12 +2,12 @@
 
 {% load widget_tweaks %}
 
-{% block title %}Editar Perfil - {{ block.super }}{% endblock %}
+{% block title %}Editar Perfil - Feirante{{ block.super }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <h3>Editar Perfil</h3>
-
+    {% include 'feirantes/mensagens.html' %}
     <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         {% csrf_token %}
 
@@ -98,10 +98,39 @@
         <div class="mb-3">
             <label class="form-label">Foto</label>
             {{ form.foto|add_class:"form-control" }}
+
+            <!-- Exibe foto atual, se existir -->
+            {% if feirante.foto %}
+            <div class="mt-3">
+                <strong>Foto atual:</strong><br>
+                <img id="foto-atual-preview" src="{{ feirante.foto.url }}" alt="Foto atual" class="img-thumbnail mt-1"
+                    style="width: 200px; height: 200px; object-fit: cover;">
+
+                <!-- Checkbox padrão do Django para limpar foto -->
+                {% if form.foto.clear_checkbox_label %}
+                <div class="form-check mt-2">
+                    {{ form.foto.clear_checkbox }}
+                    <label class="form-check-label" for="{{ form.foto.clear_checkbox.id_for_label }}">
+                        {{ form.foto.clear_checkbox_label }}
+                    </label>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Prévia da nova foto selecionada -->
+            <div id="nova-foto-preview-container" class="mt-3 d-none">
+                <strong>Nova foto selecionada:</strong><br>
+                <img id="nova-foto-preview" src="#" alt="Pré-visualização" class="img-thumbnail mt-1"
+                    style="width: 200px; height: 200px; object-fit: cover;">
+            </div>
+
             {% for error in form.foto.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>
             {% endfor %}
         </div>
+
+
 
         <div class="mb-3">
             <label class="form-label">Especialidades</label>
@@ -183,6 +212,18 @@
         <div class="mb-3">
             <label class="form-label">Nova senha</label>
             {{ form.senha|add_class:"form-control" }}
+            <div class="form-text">Se não for atualizar a senha deixe sem preencher.</div>
+
+            <!-- Exibe as regras do Django para a senha -->
+            <div class="alert alert-light border mt-2 mb-0">
+                <strong><i class="fas fa-shield-alt me-2"></i>Requisitos de senha:</strong>
+                <ul class="mb-0 mt-2 small">
+                    {% for validator in password_validators_help_texts %}
+                    <li>{{ validator }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
             {% for error in form.senha.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>
             {% endfor %}
@@ -233,5 +274,86 @@
             });
         }, false);
     })();
+
+    // Pré-visualização da nova foto
+    document.addEventListener('DOMContentLoaded', function () {
+        const fotoInput = document.querySelector('input[name="foto"]');
+        const previewContainer = document.getElementById('nova-foto-preview-container');
+        const previewImage = document.getElementById('nova-foto-preview');
+
+        if (fotoInput) {
+            fotoInput.addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImage.src = e.target.result;
+                        previewContainer.classList.remove('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewContainer.classList.add('d-none');
+                    previewImage.src = '#';
+                }
+            });
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Função para aplicar máscara de telefone/celular
+        function mascaraTelefone(valor) {
+            let apenasNumeros = valor.replace(/\D/g, '');
+
+            // Remove código do país se começar com 55
+            if (apenasNumeros.startsWith('55') && apenasNumeros.length > 10) {
+                apenasNumeros = apenasNumeros.slice(2);
+            }
+
+            if (apenasNumeros.length <= 10) {
+                // Formato antigo: (XX) XXXX-XXXX
+                return apenasNumeros.replace(/(\d{2})(\d{4})(\d{0,4})/, function (_, p1, p2, p3) {
+                    return p3 ? `(${p1}) ${p2}-${p3}` : p2 ? `(${p1}) ${p2}` : `(${p1}`;
+                });
+            } else {
+                // Formato celular: (XX) XXXXX-XXXX
+                return apenasNumeros.replace(/(\d{2})(\d{5})(\d{0,4})/, function (_, p1, p2, p3) {
+                    return `(${p1}) ${p2}${p3 ? '-' + p3 : ''}`;
+                });
+            }
+        }
+
+        // Função para aplicar máscara de CEP
+        function mascaraCEP(valor) {
+            let apenasNumeros = valor.replace(/\D/g, '');
+            if (apenasNumeros.length > 5) {
+                return apenasNumeros.replace(/(\d{5})(\d{0,3})/, '$1-$2');
+            }
+            return apenasNumeros;
+        }
+
+        // Seleciona os campos de telefone, whatsapp e cep
+        let camposTelefone = ['telefone', 'whatsapp'];
+        camposTelefone.forEach(function (nome) {
+            let input = document.querySelector(`input[name="${nome}"]`);
+            if (input) {
+                input.value = mascaraTelefone(input.value);
+                input.addEventListener('input', function () {
+                    let cursor = this.selectionStart;
+                    this.value = mascaraTelefone(this.value);
+                    this.setSelectionRange(cursor, cursor);
+                });
+            }
+        });
+
+        let campoCEP = document.querySelector(`input[name="cep"]`);
+        if (campoCEP) {
+            campoCEP.value = mascaraCEP(campoCEP.value);
+            campoCEP.addEventListener('input', function () {
+                let cursor = this.selectionStart;
+                this.value = mascaraCEP(this.value);
+                this.setSelectionRange(cursor, cursor);
+            });
+        }
+    });
 </script>
 {% endblock %}

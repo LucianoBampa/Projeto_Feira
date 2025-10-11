@@ -221,21 +221,21 @@ class FeiranteForm(forms.ModelForm):
             'cpf': forms.TextInput(
                 attrs={'class': 'form-control', 'readonly': 'readonly'}),
             "telefone": forms.TextInput(
-                attrs={"class": "form-control"}),
+                attrs={"class": "form-control", "id": "telefone"}),
             "whatsapp": forms.TextInput(
-                attrs={"class": "form-control"}),
+                attrs={"class": "form-control", "id": "whatsapp"}),
             "email": forms.EmailInput(
                 attrs={"class": "form-control"}),
             "endereco": forms.Textarea(
-                attrs={"class": "form-control", "rows": 3}),
+                attrs={"class": "form-control", "rows": 1}),
             "cidade": forms.TextInput(
                 attrs={"class": "form-control"}),
             "estado": forms.TextInput(
                 attrs={"class": "form-control"}),
             "cep": forms.TextInput(
-                attrs={"class": "form-control"}),
+                attrs={"class": "form-control", "id": "cep"}),
             "descricao": forms.Textarea(
-                attrs={"class": "form-control", "rows": 3}),
+                attrs={"class": "form-control", "rows": 2}),
             "foto": forms.ClearableFileInput(
                 attrs={"class": "form-control"}),
             "especialidades": forms.SelectMultiple(
@@ -366,7 +366,7 @@ class AvaliacaoForm(forms.ModelForm):
         widgets = {
             'usuario_nome': forms.TextInput(
                 attrs={
-                    'class': 'form-control', 'placeholder': 'Seu nome completo'
+                    'class': 'form-control', 'placeholder': 'Seu nome '
                 }
             ),
             'usuario_email': forms.EmailInput(
@@ -379,11 +379,20 @@ class AvaliacaoForm(forms.ModelForm):
                     'class': 'form-control', 'placeholder': 'Seu CPF'
                 }
             ),
-            'nota': forms.NumberInput(
+
+            'nota': forms.RadioSelect(
+                choices=[
+                    (1, '😞 Muito Ruim'),
+                    (2, '😕 Ruim'),
+                    (3, '😐 Bom'),
+                    (4, '😊 Muito Bom'),
+                    (5, '🤩 Excelente')
+                ],
                 attrs={
-                    'class': 'form-control', 'min': 1, 'max': 5
+                    'class': 'form-check-input me-2',
                 }
             ),
+
             'comentario': forms.Textarea(
                 attrs={
                     'class': 'form-control', 'rows': 4, 'placeholder':

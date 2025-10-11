@@ -19,6 +19,7 @@ from django.http import HttpResponseForbidden
 from validate_docbr import CPF
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ValidationError
+from django.contrib.auth.views import PasswordResetConfirmView
 
 
 def listar_feirantes(request):
@@ -356,7 +357,9 @@ def editar_perfil(request):
                     return render(request,
                                   'feirantes/painel/editar_perfil.html', {
                                       'form': form,
-                                      'feirante': feirante
+                                      'feirante': feirante,
+                                      'password_validators_help_texts':
+                                      password_validators_help_texts(),
                                   })
 
                 try:
@@ -372,7 +375,9 @@ def editar_perfil(request):
                     return render(
                         request, 'feirantes/painel/editar_perfil.html', {
                             'form': form,
-                            'feirante': feirante
+                            'feirante': feirante,
+                            'password_validators_help_texts':
+                            password_validators_help_texts(),
                         })
 
             feirante.save()
@@ -387,7 +392,9 @@ def editar_perfil(request):
 
     return render(request, 'feirantes/painel/editar_perfil.html', {
         'form': form,
-        'feirante': feirante
+        'feirante': feirante,
+        'password_validators_help_texts':
+        password_validators_help_texts(),
     })
 
 
@@ -494,3 +501,17 @@ def termos_uso(request):
 
 def politica_privacidade(request):
     return render(request, 'feirantes/politica_privacidade.html')
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    """View personalizada para redefinição de \
+          senha com exibição das regras do Django"""
+    template_name = 'registration/senha_redefinir_confirmar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Adiciona os textos de ajuda dos validadores de senha
+        context[
+            'password_validators_help_texts'
+        ] = password_validators_help_texts()
+        return context

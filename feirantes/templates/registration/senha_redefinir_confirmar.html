@@ -11,6 +11,7 @@
                 <h3 class="mb-0">Escolha sua nova senha</h3>
             </div>
             <div class="card-body">
+                {% if validlink %}
                 <form method="post">
                     {% csrf_token %}
 
@@ -18,8 +19,18 @@
                         <label for="{{ form.new_password1.id_for_label }}" class="form-label">Nova senha</label>
                         {{ form.new_password1|add_class:"form-control" }}
                         {% if form.new_password1.errors %}
-                        <div class="text-danger small">{{ form.new_password1.errors }}</div>
+                        <div class="text-danger small mt-2">{{ form.new_password1.errors }}</div>
                         {% endif %}
+                    </div>
+
+                    <!-- Requisitos de senha -->
+                    <div class="alert alert-light border mb-3">
+                        <strong><i class="fas fa-shield-alt me-2"></i>Requisitos de senha:</strong>
+                        <ul class="mb-0 mt-2 small">
+                            {% for validator in password_validators_help_texts %}
+                            <li>{{ validator }}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
 
                     <div class="mb-3">
@@ -27,12 +38,21 @@
                             senha</label>
                         {{ form.new_password2|add_class:"form-control" }}
                         {% if form.new_password2.errors %}
-                        <div class="text-danger small">{{ form.new_password2.errors }}</div>
+                        <div class="text-danger small mt-2">{{ form.new_password2.errors }}</div>
                         {% endif %}
                     </div>
 
                     <button type="submit" class="btn btn-success w-100 mt-3">Redefinir senha</button>
                 </form>
+                {% else %}
+                <div class="alert alert-danger text-center">
+                    O link de redefinição de senha é inválido ou já foi utilizado.
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{% url 'feirantes:password_reset' %}" class="btn btn-outline-success">Solicitar novo
+                        link</a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

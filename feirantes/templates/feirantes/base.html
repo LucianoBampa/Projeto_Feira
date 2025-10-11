@@ -1,4 +1,6 @@
 {% load static %}
+{% include 'feirantes/mensagens.html' %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -136,8 +138,8 @@
                     <small class="text-muted">
                         &copy; 2025 Sistema de Feirantes - INOVA TECH
                         <br>
-                        <a href="{% url 'feirantes:termos_uso' %}" target="_blank">Termos de Uso</a> |
-                        <a href="{% url 'feirantes:politica_privacidade' %}" target="_blank">Política de Privacidade</a>
+                        <a href="{% url 'feirantes:termos_uso' %}">Termos de Uso</a> |
+                        <a href="{% url 'feirantes:politica_privacidade' %}">Política de Privacidade</a>
                     </small>
                 </div>
             </div>

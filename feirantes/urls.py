@@ -35,6 +35,7 @@ urlpatterns = [
         ),
         name='password_reset'
     ),
+
     path(
         'senha/redefinir/enviado/',
         auth_views.PasswordResetDoneView.as_view(
@@ -42,14 +43,15 @@ urlpatterns = [
         ),
         name='password_reset_done'
     ),
+
     path(
         'senha/redefinir/<uidb64>/<token>/',
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name='registration/senha_redefinir_confirmar.html',
+        views.CustomPasswordResetConfirmView.as_view(
             success_url=reverse_lazy('feirantes:password_reset_complete')
         ),
         name='password_reset_confirm'
     ),
+
     path(
         'senha/redefinir/concluido/',
         auth_views.PasswordResetCompleteView.as_view(
@@ -64,6 +66,7 @@ urlpatterns = [
         auth_views.LoginView.as_view(template_name='registration/login.html'),
         name='login'
     ),
+
     path(
         'logout/',
         auth_views.LogoutView.as_view(next_page='feirantes:login'),
