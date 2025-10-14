@@ -151,6 +151,9 @@ def loja_feirante(request, subdominio):
 
 def cadastro_feirante(request):
     """Página de cadastro de feirantes"""
+    if request.user.is_authenticated:
+        return redirect('feirantes:listar')
+
     if request.method == 'POST':
         form = CadastroFeiranteForm(request.POST)
         if form.is_valid():
