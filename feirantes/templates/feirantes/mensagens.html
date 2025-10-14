@@ -59,8 +59,8 @@
         document.querySelectorAll('.toast').forEach(toastEl => {
             // verifica se tem classe de sucesso ou informação
             if (toastEl.classList.contains('alert-success') || toastEl.classList.contains('alert-info')) {
-                // some automaticamente depois de 7s
-                new bootstrap.Toast(toastEl, { delay: 3000, autohide: true }).show();
+                // some automaticamente depois de 2s
+                new bootstrap.Toast(toastEl, { delay: 2000, autohide: true }).show();
             } else {
                 // permanece até o usuário fechar
                 new bootstrap.Toast(toastEl, { autohide: false }).show();
