@@ -4,6 +4,14 @@
 
 {% block title %}Editar Perfil - Feirante{{ block.super }}{% endblock %}
 
+
+{% block extra_css %} 
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+{% endblock %}
+
+
+
+
 {% block content %}
 <div class="container mt-4">
     <h3>Editar Perfil</h3>
@@ -140,6 +148,7 @@
             <div class="invalid-feedback d-block">{{ error }}</div>
             {% endfor %}
         </div>
+
 
         <div class="mb-3">
             <label class="form-label">Feiras</label>
@@ -355,5 +364,26 @@
             });
         }
     });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<script>
+//Select com TomSelect
+document.addEventListener("DOMContentLoaded", () => {
+  // Seleciona todos os selects com atributo multiple
+  document.querySelectorAll("select[multiple]").forEach(select => {
+    new TomSelect(select, {
+      plugins: ['remove_button'],
+      create: false,
+      persist: false,
+      placeholder: select.getAttribute('placeholder') || 'Selecione...',
+      maxOptions: 1000,
+      onItemAdd() {
+        this.setTextboxValue('');
+      },
+    });
+  });
+});
 </script>
 {% endblock %}
