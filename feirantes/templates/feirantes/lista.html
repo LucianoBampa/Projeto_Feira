@@ -15,9 +15,11 @@
                     <a href="{% url 'feirantes:mapa' %}" class="btn btn-outline-success me-2">
                         <i class="fas fa-map-marker-alt me-1"></i>Ver no Mapa
                     </a>
-                    <a href="{% url 'feirantes:cadastro' %}" class="btn btn-success">
-                        <i class="fas fa-plus me-1"></i>Cadastrar-se
-                    </a>
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'feirantes:cadastro' %}" class="btn btn-success">
+                            <i class="fas fa-plus me-1"></i>Cadastrar-se
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
