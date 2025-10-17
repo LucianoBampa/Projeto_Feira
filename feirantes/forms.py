@@ -242,8 +242,11 @@ class FeiranteForm(forms.ModelForm):
                 attrs={"class": "form-select"}),
             "feiras": forms.SelectMultiple(
                 attrs={"class": "form-select"}),
+<<<<<<< HEAD
             # "ativo": forms.CheckboxInput(
             #     attrs={"class": "form-check-input"}),
+=======
+>>>>>>> ac9a788f9427ab19f2cf2101119842b23baa2108
             "verificado": forms.CheckboxInput(
                 attrs={"class": "form-check-input"}),
             "subdominio": forms.TextInput(
