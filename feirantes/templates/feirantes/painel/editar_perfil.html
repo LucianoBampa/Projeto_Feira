@@ -5,8 +5,40 @@
 {% block title %}Editar Perfil - Feirante{{ block.super }}{% endblock %}
 
 
-{% block extra_css %} 
+{% block extra_css %}
 <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<style>
+    /* Estilo do placeholder do TomSelect */
+    .ts-control input::placeholder {
+        color: #0d6efd;
+        /* azul padrão Bootstrap */
+        font-weight: bold;
+        /* deixa em negrito */
+        font-style: normal;
+        /* remove itálico padrão */
+    }
+
+    /* Opcional: estilo quando o campo está focado */
+    .ts-control.focus input::placeholder {
+        color: #6610f2;
+        /* muda para roxo no foco */
+    }
+
+    /* Se quiser o select alinhado à direita */
+    .select-direita {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .bi-info-circle {
+        cursor: pointer;
+    }
+
+    /* Estilo para os labels dos campos de seleção */
+    div[select-direita] label.form-label {
+        cursor: pointer;
+    }
+</style>
 {% endblock %}
 
 
@@ -140,9 +172,12 @@
 
 
 
-        <div class="mb-3">
-            <label class="form-label">Especialidades</label>
-            {{ form.especialidades|add_class:"form-select" }}
+        <div class="mb-3" select-direita>
+            <label class="form-label">
+                Especialidades
+                {{ form.especialidades|add_class:"form-select text-primary fw-semibold" }}
+            </label>
+
             <div class="form-text">Principais produtos/especialidades</div>
             {% for error in form.especialidades.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>
@@ -150,9 +185,11 @@
         </div>
 
 
-        <div class="mb-3">
-            <label class="form-label">Feiras</label>
-            {{ form.feiras|add_class:"form-select" }}
+        <div class="mb-3" select-direita>
+            <label class="form-label">
+                Feiras
+                {{ form.feiras|add_class:"form-select text-primary fw-semibold" }}"
+            </label>
             <div class="form-text">Feiras onde o feirante participa</div>
             {% for error in form.feiras.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>
@@ -369,21 +406,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <script>
-//Select com TomSelect
-document.addEventListener("DOMContentLoaded", () => {
-  // Seleciona todos os selects com atributo multiple
-  document.querySelectorAll("select[multiple]").forEach(select => {
-    new TomSelect(select, {
-      plugins: ['remove_button'],
-      create: false,
-      persist: false,
-      placeholder: select.getAttribute('placeholder') || 'Selecione...',
-      maxOptions: 1000,
-      onItemAdd() {
-        this.setTextboxValue('');
-      },
+    //Select com TomSelect
+    document.addEventListener("DOMContentLoaded", () => {
+        // Seleciona todos os selects com atributo multiple
+        document.querySelectorAll("select[multiple]").forEach(select => {
+            new TomSelect(select, {
+                plugins: ['remove_button'],
+                create: false,
+                persist: false,
+                placeholder: select.getAttribute('placeholder') || 'Selecione',
+                maxOptions: 1000,
+                onItemAdd() {
+                    this.setTextboxValue('');
+                },
+            });
+        });
     });
-  });
-});
 </script>
 {% endblock %}

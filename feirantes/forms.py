@@ -212,7 +212,7 @@ class FeiranteForm(forms.ModelForm):
             'nome_comercial', 'cpf', 'telefone', 'whatsapp',
             'email', 'endereco', 'cidade', 'estado', 'cep',
             'descricao', 'foto', 'especialidades',
-            'feiras', 'ativo', 'verificado', 'subdominio',
+            'feiras', 'verificado', 'subdominio',
             'instagram', 'facebook'
         ]
         widgets = {
@@ -242,8 +242,8 @@ class FeiranteForm(forms.ModelForm):
                 attrs={"class": "form-select"}),
             "feiras": forms.SelectMultiple(
                 attrs={"class": "form-select"}),
-            "ativo": forms.CheckboxInput(
-                attrs={"class": "form-check-input"}),
+            # "ativo": forms.CheckboxInput(
+            #     attrs={"class": "form-check-input"}),
             "verificado": forms.CheckboxInput(
                 attrs={"class": "form-check-input"}),
             "subdominio": forms.TextInput(
