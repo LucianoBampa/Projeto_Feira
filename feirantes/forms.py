@@ -3,9 +3,6 @@ from .models import Feira, Feirante, Produto, Avaliacao
 from validate_docbr import CPF
 from typing import Optional
 from decimal import Decimal, ROUND_HALF_UP
-from django.contrib.auth.models import User
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
 
 # ==========================
 # Form de Feira
@@ -184,24 +181,7 @@ class CadastroFeiranteForm(forms.Form):
         email = cleaned_data.get("email")
 
         if senha and confirmar_senha and senha != confirmar_senha:
-            self.add_error('confirmar_senha',
-                           'Confirmar senha deve ser igual a senha')
-
-        if senha:
-            partes_nome = nome.split() if nome else []
-
-            fake_user = User(
-                username=email or 'temp_user',
-                email=email or '',
-                first_name=partes_nome[0] if partes_nome else '',
-                last_name=' '.join(partes_nome[1:]) if len(
-                    partes_nome) > 1 else ''
-            )
-            try:
-                validate_password(str(senha), user=fake_user)
-            except ValidationError as e:
-                for erro in e.messages:
-                    self.add_error('senha', erro)
+            raise forms.ValidationError("As senhas não coincidem.")
 
         return cleaned_data
 
