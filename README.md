@@ -119,6 +119,9 @@ python manage.py createsuperuser
 7. Execute o servidor de desenvolvimento:
 python manage.py runserver
 
+8. Para atualizações atraves do Github
+git pull origin main
+
 # 5. Considerações
 
 O banco de dados atual é SQLite3, adequado para desenvolvimento local. Para produção, recomenda-se migrar para MySQL ou PostgreSQL.
