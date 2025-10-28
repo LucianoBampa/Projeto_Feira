@@ -245,7 +245,7 @@
             <!-- Campo oculto para prevenir autofill -->
             <input type="text" style="display:none">
             {{ form.senha|add_class:"form-control" }}
-            <div class="form-text">Se não for atualizar a senha deixe sem preencher.</div>
+            <div class="form-text"><strong>Se não for atualizar a senha deixar sem preencher.</strong></div>
             <div class="alert alert-light border mt-2 mb-0">
                 <strong><i class="fas fa-shield-alt me-2"></i>Requisitos de senha:</strong>
                 <ul class="mb-0 mt-2 small">
@@ -262,6 +262,7 @@
             <label class="form-label">Confirmar nova senha</label>
             <input type="text" style="display:none">
             {{ form.confirmar_senha|add_class:"form-control" }}
+            <div class="form-text"><strong>Se não for atualizar a senha deixar sem preencher.</strong></div>
             {% for error in form.confirmar_senha.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>
             {% endfor %}
