@@ -177,8 +177,8 @@ class CadastroFeiranteForm(forms.Form):
         cleaned_data = super().clean()
         senha = cleaned_data.get("senha")
         confirmar_senha = cleaned_data.get("confirmar_senha")
-        nome = cleaned_data.get("nome_completo")
-        email = cleaned_data.get("email")
+        # nome = cleaned_data.get("nome_completo")
+        # email = cleaned_data.get("email")
 
         if senha and confirmar_senha and senha != confirmar_senha:
             raise forms.ValidationError("As senhas não coincidem.")
@@ -260,6 +260,20 @@ class FeiranteForm(forms.ModelForm):
             # Para edição, tornar o CPF não obrigatório
             self.fields['cpf'].required = False
             self.fields['confirmar_email'].initial = self.instance.email
+
+            # Garante que os campos de senha fiquem SEMPRE vazios
+            self.fields['senha'].initial = ''
+            self.fields['confirmar_senha'].initial = ''
+            self.fields['senha'].widget.attrs.update({
+                'class': 'form-control',
+                'autocomplete': 'new-password',
+                'placeholder': 'Digite uma nova senha (opcional)'
+            })
+            self.fields['confirmar_senha'].widget.attrs.update({
+                'class': 'form-control',
+                'autocomplete': 'new-password',
+                'placeholder': 'Confirme a nova senha'
+            })
 
     def clean_cpf(self):
         cpf = self.cleaned_data.get("cpf", "")
@@ -411,32 +425,3 @@ class AvaliacaoForm(forms.ModelForm):
             raise forms.ValidationError(
                 "CPF inválido. Verifique e tente novamente.")
         return cpf
-
-
-# class UsuarioForm(forms.Form):
-#     nome = forms.CharField(label="Nome Completo", max_length=100)
-#     email = forms.EmailField(label="E-mail")
-#     cpf = forms.CharField(label="CPF", max_length=14)
-#     senha = forms.CharField(label="Senha", widget=forms.PasswordInput)
-#     confirmar_senha = forms.CharField(
-#         label="Confirmar Senha", widget=forms.PasswordInput)
-
-#     def clean_cpf(self):
-#         cpf = self.cleaned_data.get("cpf")
-#         validar_cpf(cpf)
-#         return cpf
-
-#     def clean_email(self):
-#         email = self.cleaned_data.get("email")
-#         if User.objects.filter(email=email).exists():
-#             raise ValidationError("Este e-mail já está cadastrado.")
-#         return email
-
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         senha = cleaned_data.get("senha")
-#         confirmar = cleaned_data.get("confirmar_senha")
-
-#         if senha and confirmar and senha != confirmar:
-#             self.add_error("confirmar_senha", "As senhas não coincidem.")
-#         return cleaned_data

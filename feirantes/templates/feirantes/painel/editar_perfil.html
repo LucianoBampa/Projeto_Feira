@@ -41,9 +41,6 @@
 </style>
 {% endblock %}
 
-
-
-
 {% block content %}
 <div class="container mt-4">
     <h3>Editar Perfil</h3>
@@ -196,19 +193,6 @@
             {% endfor %}
         </div>
 
-        <!-- <div class="mb-3">
-            <label class="form-label">Ativo</label>
-            <div class="form-check">
-                {{ form.ativo|add_class:"form-check-input" }}
-                <label class="form-check-label" for="{{ form.ativo.id_for_label }}">
-                    Ativo
-                </label>
-            </div>
-            {% for error in form.ativo.errors %}
-            <div class="invalid-feedback d-block">{{ error }}</div>
-            {% endfor %}
-        </div> -->
-
         <div class="mb-3">
             <label class="form-label">Verificado</label>
             <div class="form-check">
@@ -255,12 +239,13 @@
             {% endfor %}
         </div>
 
+        <!-- Senha e confirmação -->
         <div class="mb-3">
             <label class="form-label">Nova senha</label>
+            <!-- Campo oculto para prevenir autofill -->
+            <input type="text" style="display:none">
             {{ form.senha|add_class:"form-control" }}
             <div class="form-text">Se não for atualizar a senha deixe sem preencher.</div>
-
-            <!-- Exibe as regras do Django para a senha -->
             <div class="alert alert-light border mt-2 mb-0">
                 <strong><i class="fas fa-shield-alt me-2"></i>Requisitos de senha:</strong>
                 <ul class="mb-0 mt-2 small">
@@ -269,19 +254,19 @@
                     {% endfor %}
                 </ul>
             </div>
-
             {% for error in form.senha.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>
             {% endfor %}
         </div>
-
         <div class="mb-3">
             <label class="form-label">Confirmar nova senha</label>
+            <input type="text" style="display:none">
             {{ form.confirmar_senha|add_class:"form-control" }}
             {% for error in form.confirmar_senha.errors %}
             <div class="invalid-feedback d-block">{{ error }}</div>
             {% endfor %}
         </div>
+
 
         <div class="d-flex justify-content-end">
             <a class="btn btn-secondary me-2" href="{% url 'feirantes:painel' %}">Cancelar</a>
