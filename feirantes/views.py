@@ -24,7 +24,10 @@ from django.contrib.auth.views import PasswordResetConfirmView
 
 def listar_feirantes(request):
     """Lista todos os feirantes ativos"""
-    feirantes = Feirante.objects.filter(ativo=True)
+    feirantes = Feirante.objects.filter(ativo=True).order_by('nome_comercial')
+    paginator = Paginator(feirantes, 6)
+    page_number = request.GET.get('page')
+    feirantes = paginator.get_page(page_number)
     return render(request, 'feirantes/lista.html', {
         'feirantes': feirantes
     })
