@@ -122,6 +122,10 @@
                     <a href="mailto:{{ a.usuario_email }}">{{ a.usuario_email }}</a>
                 </small>
                 {% endif %}
+                <!-- Aqui mostra a data formatada -->
+                <small class="text-muted d-block">
+                    Postado em: {{ a.criado_em|date:"d/m/Y H:i" }}
+                </small>
                 <p class="mt-2">{{ a.comentario }}</p>
             </div>
             {% endfor %}

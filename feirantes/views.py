@@ -307,7 +307,7 @@ def painel_feirante(request):
     media = avaliacoes_qs.aggregate(media=Avg('nota'))['media']
     media_avaliacao = round(media, 1) if media else None
 
-    # Paginação (5 avaliações por página)
+    # Paginação (3 avaliações por página)
     paginator = Paginator(avaliacoes_qs, 3)
     page_number = request.GET.get('page', 1)
     try:
@@ -510,7 +510,7 @@ def politica_privacidade(request):
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    """View personalizada para redefinição de \
+    """View personalizada para redefinição de
           senha com exibição das regras do Django"""
     template_name = 'registration/senha_redefinir_confirmar.html'
 
