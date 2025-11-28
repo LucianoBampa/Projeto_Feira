@@ -1,4 +1,5 @@
 import json
+import unicodedata  # <-- ADICIONE ESTA LINHA
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -10,7 +11,8 @@ from django.contrib.auth.password_validation import (
     password_validators_help_texts,
     validate_password,
 )
-from django.db import transaction
+# <-- MANTENHA ASSIM (connection já está aqui)
+from django.db import transaction, connection
 from django.db.models import F, Avg
 from django.utils.text import slugify
 from django.urls import reverse
@@ -20,6 +22,16 @@ from validate_docbr import CPF
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ValidationError
 from django.contrib.auth.views import PasswordResetConfirmView
+
+
+def remover_acentos(texto):
+    """Remove acentos de uma string"""
+    if not texto:
+        return texto
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', texto)
+        if unicodedata.category(c) != 'Mn'
+    )
 
 
 def listar_feirantes(request):
@@ -106,18 +118,44 @@ def listar_feiras(request):
 
 
 def buscar(request):
-    """Busca feirantes e produtos"""
+    """Busca feirantes e produtos ignorando acentos"""
     query = request.GET.get('q', '')
     feirantes = []
     produtos = []
 
     if query:
-        feirantes = Feirante.objects.filter(
-            nome_comercial__icontains=query, ativo=True
-        )
-        produtos = Produto.objects.filter(
-            nome__icontains=query, disponivel=True, feirante__ativo=True
-        )
+        if connection.vendor == 'postgresql':
+            # PostgreSQL com unaccent
+            feirantes = Feirante.objects.filter(
+                nome_comercial__unaccent__icontains=query, ativo=True
+            )
+            produtos = Produto.objects.filter(
+                nome__unaccent__icontains=query,
+                disponivel=True,
+                feirante__ativo=True
+            )
+        else:
+            # SQLite - normaliza manualmente
+            query_normalizada = remover_acentos(query.lower())
+
+            todos_feirantes = Feirante.objects.filter(ativo=True)
+            todos_produtos = Produto.objects.filter(
+                disponivel=True, feirante__ativo=True
+            )
+
+            # Filtra comparando versões sem acento
+            feirantes = [
+                f for f in todos_feirantes
+                if query_normalizada in remover_acentos(
+                    f.nome_comercial.lower())
+            ]
+
+            produtos = [
+                p for p in todos_produtos
+                if query_normalizada in remover_acentos(p.nome.lower())
+                or (p.descricao and query_normalizada in remover_acentos(
+                    p.descricao.lower()))
+            ]
 
     return render(request, 'feirantes/busca.html', {
         'query': query,
