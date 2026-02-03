@@ -36,7 +36,7 @@ O **Sistema de Feirantes** é uma plataforma web desenvolvida em Django para **c
 ---
 
 ## 4. Estrutura de Diretórios Importante
-
+```
 feirantes/
 ├─ templates/
 │ ├─ feirantes/
@@ -66,6 +66,7 @@ feirantes/
 ├─ views.py
 ├─ urls.py
 └─ manage.py
+```
 
 ## 5. Instalação e Setup
 
