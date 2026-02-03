@@ -143,7 +143,7 @@ O sistema está preparado para futuras integrações, como pagamentos e notifica
 [Política de Privacidade](feirantes/politica_privacidade.html)
 
 
-# 9. Licença
+## 9. Licença
 Este é um **projeto acadêmico**, desenvolvido por **Luciano Bampa Vieira**.
 
 O uso do código é permitido **exclusivamente para fins educacionais e não comerciais**.
