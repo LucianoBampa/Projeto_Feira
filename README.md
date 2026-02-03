@@ -137,6 +137,8 @@ O sistema está preparado para futuras integrações, como pagamentos e notifica
 ## 8. Links Úteis
 
 [Repositório GitHub](https://github.com/LucianoBampa/Projeto_Feira.git)
+
 [Termos de Uso](feirantes/termos_uso.html)
+
 [Política de Privacidade](feirantes/politica_privacidade.html)
 
