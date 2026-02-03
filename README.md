@@ -32,6 +32,7 @@ O **Sistema de Feirantes** é uma plataforma web desenvolvida em Django para **c
 - **Banco de Dados:** SQLite3 (atualmente; preparado para MySQL 9.0.1)
 - **APIs/JS:** Leaflet.js (mapa interativo)
 - **Outros:** validate-docbr (validação de CPF)
+- **Git e GitHub:** Para Commits e Versionamentos do Projeto
 
 ---
 
