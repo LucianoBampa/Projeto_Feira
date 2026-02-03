@@ -122,10 +122,10 @@ Siga os passos abaixo para configurar e iniciar o projeto localmente:
   ### 6 - Inicie o servidor de desenvolvimento
   python manage.py runserver
 
-    Abra o navegador e acesse:
-    http://127.0.0.1:8000/
+  ### 7 - Abra o navegador e acesse
+  http://127.0.0.1:8000/
 
-  ### 7 - Para atualizações atraves do Github
+  ### 8 - Para atualizações atraves do Github
   git pull origin main
 
 ## 7. Considerações
