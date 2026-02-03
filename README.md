@@ -26,6 +26,18 @@ O **Sistema de Feirantes** é uma plataforma web desenvolvida em Django para **c
     - Integração com mapa interativo para localização de feiras
     - Páginas de Termos de Uso e Política de Privacidade (conforme LGPD)
 
+  ### Painel Administrativo
+    Este projeto utiliza o Django Admin para gerenciamento do sistema.
+
+    Acesso:
+    - URL: `http://localhost:8000/admin`
+    - Criar superusuário: `python manage.py createsuperuser`
+
+  ### Funcionalidades disponíveis
+    - Gerenciamento de usuários
+    - CRUD de [Create (Criar), Read (Ler), Update (Atualizar), Delete (Deletar)]
+    - Logs de atividades
+
 ## 3. Tecnologias Utilizadas
 - **Backend:** Python 3.x, Django 4.x
 - **Frontend:** HTML5, CSS3, Bootstrap 5, FontAwesome
